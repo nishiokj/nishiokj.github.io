@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project — Jevin Nishioka</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main>
+    <nav class="project-nav">
+      <a href="index.html" class="back-link">← Jevin Nishioka</a>
+    </nav>
+
+    <header class="project-detail-header">
+      <h1 data-title></h1>
+      <time class="project-detail-date" data-date></time>
+    </header>
+
+    <hr class="rule" />
+
+    <p class="project-lede" data-body></p>
+
+    <hr class="rule" hidden data-why-rule />
+
+    <section hidden data-why-section>
+      <h2 class="section-label">Why I built this</h2>
+      <div class="prose-blocks" data-why></div>
+    </section>
+
+    <hr class="rule" hidden data-what-rule />
+
+    <section hidden data-what-section>
+      <h2 class="section-label">What it is</h2>
+      <div class="prose-blocks" data-what></div>
+    </section>
+
+    <hr class="rule" />
+
+    <section>
+      <h2 class="section-label">Decisions</h2>
+      <div class="decisions-list" data-decisions></div>
+    </section>
+
+    <hr class="rule" hidden data-demo-rule />
+
+    <section hidden data-demo-section>
+      <h2 class="section-label">Demo</h2>
+      <div data-demo></div>
+    </section>
+
+    <hr class="rule" hidden data-experiments-rule />
+
+    <section hidden data-experiments-section>
+      <h2 class="section-label">Experiments</h2>
+      <div class="grid-3 experiments-grid" data-experiments></div>
+    </section>
+
+    <hr class="rule" hidden data-other-experiments-rule />
+
+    <section hidden data-other-experiments-section>
+      <h2 class="section-label">Other Experiments I've run</h2>
+      <div class="prose-blocks" data-other-experiments></div>
+    </section>
+
+    <hr class="rule" />
+
+    <section>
+      <h2 class="section-label">Artifacts</h2>
+      <ul class="artifacts-list" data-artifacts></ul>
+    </section>
+  </main>
+
+  <script src="content.js"></script>
+  <script src="project-render.js"></script>
+</body>
+</html>

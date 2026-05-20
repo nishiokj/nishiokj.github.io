@@ -1,0 +1,551 @@
+/* ---------------------------------------------------------------------------
+   Tokens — pulled from Experiments/tools/charts/brand/tokens.py.
+--------------------------------------------------------------------------- */
+:root {
+  --ink:    #1B1B1F;
+  --muted:  #807A6F;
+  --accent: #A6342B;
+  --bg:     #F6F1E6;
+  --grid:   #E3DBC9;
+
+  --serif-display: "Charter", "Iowan Old Style", "Hoefler Text", "Georgia", "DejaVu Serif", serif;
+  --serif-body:    "Charter", "Georgia", "DejaVu Serif", serif;
+
+  /* ~30% smaller across the board */
+  --size-caption: 0.625rem;   /* 10px */
+  --size-body:    0.75rem;    /* 12px */
+  --size-subhead: 0.8125rem;  /* 13px */
+  --size-display: 1.625rem;   /* 26px */
+  --size-section: 0.9375rem;  /* 15px */
+
+  --max:    78rem;
+  --gutter: 2rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif-body);
+  font-size: var(--size-body);
+  line-height: 1.45;
+  font-feature-settings: "kern", "liga", "onum";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 2.5rem var(--gutter) 1.5rem;
+}
+
+/* Section labels */
+.section-label {
+  font-family: var(--serif-display);
+  font-size: var(--size-caption);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin: 0 0 0.6rem;
+}
+
+/* Hairlines */
+.rule {
+  border: 0;
+  border-top: 1px solid var(--grid);
+  margin: 0.75rem 0;
+}
+
+.rule--accent { border-top-color: var(--accent); }
+
+/* ---------------------------------------------------------------------------
+   Masthead — name, links, bio. All left-aligned, stacked.
+--------------------------------------------------------------------------- */
+.masthead {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.masthead h1 {
+  font-family: var(--serif-display);
+  font-weight: 700;
+  font-size: var(--size-display);
+  line-height: 1;
+  letter-spacing: -0.015em;
+  margin: 0;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.bio {
+  margin: 0.35rem 0 0;
+  color: var(--ink);
+  max-width: 38rem;
+  line-height: 1.5;
+}
+
+.masthead-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 0;
+  font-size: var(--size-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.masthead-links li {
+  padding: 0 0.75rem;
+}
+
+.masthead-links li:first-child { padding-left: 0; }
+.masthead-links li:last-child  { padding-right: 0; }
+
+.masthead-links li + li {
+  border-left: 1px solid var(--accent);
+}
+
+.masthead-links a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--grid);
+  padding-bottom: 0.08rem;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+.masthead-links a:hover,
+.masthead-links a:focus-visible {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  outline: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Projects — stacked cards. Title + date on row 1, artifact on row 2, body on row 3.
+--------------------------------------------------------------------------- */
+.projects {
+  margin: 0;
+  padding: 0;
+}
+
+.project {
+  display: grid;
+  grid-template-columns: 1fr 5rem;
+  grid-template-rows: auto auto auto;
+  column-gap: 1.25rem;
+  row-gap: 0;
+  align-items: start;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--grid);
+}
+
+.project:first-child { border-top: 0; }
+.project:last-child  { border-bottom: 1px solid var(--grid); }
+
+.project-title {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+}
+
+.project-date {
+  grid-column: 2;
+  grid-row: 1;
+  font-family: var(--serif-display);
+  font-size: var(--size-caption);
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum";
+  white-space: nowrap;
+  text-align: right;
+}
+
+.project-artifact {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin: 0.65rem 0;
+}
+
+.project-artifact--empty {
+  border: 1px dashed var(--grid);
+  min-height: 5rem;
+}
+
+.artifact-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.project-body {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.read-more {
+  display: inline-block;
+  margin-left: 0.5em;
+  font-size: 0.5rem;
+  font-family: var(--serif-display);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--bg);
+  background: var(--accent);
+  text-decoration: none;
+  padding: 0.1em 0.45em 0.15em;
+  vertical-align: middle;
+  transition: opacity 120ms ease;
+}
+
+.read-more:hover,
+.read-more:focus-visible {
+  opacity: 0.82;
+  outline: none;
+}
+
+.project h2 {
+  font-family: var(--serif-display);
+  font-weight: 700;
+  font-size: var(--size-section);
+  line-height: 1.1;
+  margin: 0;
+  color: var(--accent);
+  letter-spacing: -0.005em;
+}
+
+.project h2 a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+.project h2 a:hover,
+.project h2 a:focus-visible {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  outline: none;
+}
+
+.project-sub {
+  font-style: italic;
+  color: var(--muted);
+  margin: 0.1rem 0 0;
+  font-size: var(--size-body);
+  line-height: 1.3;
+}
+
+/* ---------------------------------------------------------------------------
+   Experiments — three across, compact.
+--------------------------------------------------------------------------- */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+}
+
+.grid-3 > * {
+  padding: 0 1rem;
+  border-left: 1px solid var(--grid);
+}
+
+.grid-3 > *:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.grid-3 > *:last-child {
+  padding-right: 0;
+}
+
+.experiments-grid { align-items: start; }
+
+.chart {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.chart-caption {
+  margin: 0.5rem 0 0;
+  font-size: var(--size-caption);
+  font-style: italic;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* ---------------------------------------------------------------------------
+   Footer
+--------------------------------------------------------------------------- */
+.colophon-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.colophon {
+  font-size: var(--size-caption);
+  font-style: italic;
+  color: var(--muted);
+}
+
+/* ---------------------------------------------------------------------------
+   Narrow viewports
+--------------------------------------------------------------------------- */
+@media (max-width: 60rem) {
+  .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1rem; }
+  .grid-3 > *:nth-child(3) { padding-left: 0; border-left: 0; }
+}
+
+@media (max-width: 40rem) {
+  :root { --gutter: 1rem; }
+  .project { gap: 0.15rem; }
+  .grid-3 { grid-template-columns: 1fr; }
+  .grid-3 > * { padding: 0; border-left: 0; }
+}
+
+/* ---------------------------------------------------------------------------
+   Project detail page
+--------------------------------------------------------------------------- */
+.project-nav {
+  margin-bottom: 1.75rem;
+}
+
+.back-link {
+  font-size: var(--size-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 0.08rem;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  outline: none;
+}
+
+.project-detail-header h1 {
+  font-family: var(--serif-display);
+  font-weight: 700;
+  font-size: var(--size-display);
+  letter-spacing: -0.015em;
+  line-height: 1;
+  margin: 0 0 0.4rem;
+  color: var(--ink);
+}
+
+.project-detail-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+}
+
+.project-detail-sub {
+  font-style: italic;
+  color: var(--muted);
+  margin: 0;
+  font-size: var(--size-body);
+}
+
+.project-detail-date {
+  font-family: var(--serif-display);
+  font-size: var(--size-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.project-lede {
+  max-width: 48rem;
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* Prose blocks — used by Why / What sections */
+.prose-blocks {
+  max-width: 48rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.prose-p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.prose-list {
+  margin: 0;
+  padding-left: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  line-height: 1.5;
+}
+
+.prose-list--ol { padding-left: 1.6rem; }
+
+.prose-list li::marker {
+  color: var(--muted);
+}
+
+.prose-sub {
+  margin: 0.35rem 0 0;
+  padding-left: 1.1rem;
+  list-style-type: "— ";
+  color: var(--ink);
+}
+
+.prose-sub li::marker {
+  color: var(--muted);
+}
+
+.prose-sub li {
+  line-height: 1.5;
+}
+
+/* Decisions */
+.decisions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 48rem;
+}
+
+.decision-item {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 0 0.75rem;
+  align-items: start;
+}
+
+.decision-num {
+  font-family: var(--serif-display);
+  font-size: var(--size-caption);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-top: 0.15em;
+}
+
+.decision-heading {
+  font-family: var(--serif-display);
+  font-weight: 700;
+  font-size: var(--size-section);
+  margin: 0 0 0.3rem;
+  color: var(--ink);
+}
+
+.decision-body {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+/* Demo */
+.demo-media {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  max-width: 24rem;
+}
+
+/* YAML config sample (What it is) */
+.arch-yaml {
+  margin: 0;
+  padding: 0.7rem 0.85rem;
+  background: var(--grid);
+  border: 1px solid var(--ink);
+  font-family: "SF Mono", "Menlo", "Fira Code", monospace;
+  font-size: 0.56rem;
+  line-height: 1.3;
+  color: var(--ink);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* Placeholder boxes */
+.placeholder-box {
+  border: 1px dashed var(--grid);
+  padding: 1.25rem 1.5rem;
+  color: var(--muted);
+  font-size: var(--size-caption);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.placeholder-box.tall {
+  min-height: 10rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.placeholder-box code {
+  font-family: "SF Mono", "Fira Code", "Menlo", monospace;
+  font-style: normal;
+  font-size: 0.9em;
+  background: var(--grid);
+  padding: 0.1em 0.3em;
+  border-radius: 2px;
+}
+
+/* Artifacts */
+.artifacts-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.artifact-item a {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: var(--size-body);
+  border-bottom: 1px solid var(--grid);
+  padding-bottom: 0.08rem;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+.artifact-item a:hover,
+.artifact-item a:focus-visible {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  outline: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
