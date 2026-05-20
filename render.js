@@ -36,7 +36,7 @@
         : esc(p.title);
       const artifact = p.artifact
         ? `<div class="project-artifact"><img src="${esc(p.artifact.src)}" alt="${esc(p.artifact.alt)}" class="artifact-img" /></div>`
-        : `<div class="project-artifact project-artifact--empty"></div>`;
+        : "";
       return `
       <div class="project">
         <dt class="project-title">

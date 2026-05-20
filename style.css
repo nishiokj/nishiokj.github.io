@@ -18,7 +18,7 @@
   --size-display: 1.625rem;   /* 26px */
   --size-section: 0.9375rem;  /* 15px */
 
-  --max:    78rem;
+  --max:    84rem;
   --gutter: 2rem;
 }
 
@@ -177,11 +177,6 @@ main {
   margin: 0.65rem 0;
 }
 
-.project-artifact--empty {
-  border: 1px dashed var(--grid);
-  min-height: 5rem;
-}
-
 .artifact-img {
   display: block;
   width: 100%;
@@ -191,7 +186,8 @@ main {
 .project-body {
   grid-column: 1 / -1;
   grid-row: 3;
-  margin: 0;
+  margin: 0.45rem 0 0;
+  max-width: 48rem;
   color: var(--ink);
   line-height: 1.4;
 }
