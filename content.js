@@ -24,21 +24,28 @@ window.SITE = {
     {
       title:    "Substrate",
       slug:     "substrate",
-      subtitle: "Language-agnostic tool execution for agent apps.",
       body:     "Rust-based tool execution substrate that separates an agent's control layer from execution, so tool implementations don't have to be rebuilt per language and product.",
       date:     "May 2026",
       datetime: "2026-05",
       detail: {
         // Add why / what / decisions / demo / artifacts. See the Bucephalus entry for the full shape.
+        what: {
+          intro: [
+          ],
+          diagram: {
+            src:     "projects/substrate/architecture.svg",
+            alt:     "Substrate architecture — an agent app issues a tool call through a language SDK, which is routed either as a direct call or through a broker to a worker; both reach the Substrate server, which consults a policy and workspace resolver and is backed by stores for sessions, a sandbox, an effect ledger, and artifacts.",
+            caption: "A tool call's path — the agent app calls in through a language SDK, gets routed directly or through the broker to a worker, and the Substrate server runs it against a resolved policy and workspace, persisting sessions, a sandbox, an effect ledger, and artifacts.",
+          },
+        },
         decisions: [],
         artifacts: [],
       },
     },
     {
       title:    "Genie",
-      slug:     "synthetic-data-pipeline",
-      subtitle: "Staged generator for benchmark cases.",
-      body:     "Opinionated data generation workflow based on Adversarial revision + LLM-as-Judge pattern, which aids in reducing common quality issues in synthetic data.",
+      slug:     "genie",
+      body:     "Opinionated data generation workflow based on the adversarial revision + LLM-as-Judge pattern, which aids in reducing common quality issues in synthetic data.",
       date:     "Apr 2026",
       datetime: "2026-04",
       detail: {
@@ -64,8 +71,7 @@ window.SITE = {
     },
     {
       title:    "Bucephalus",
-      slug:     "agentlab",
-      subtitle: "Experiment Runner for controlled agent evaluation.",
+      slug:     "bucephalus",
       body:     "Rust-based experiment harness designed around the idea that experiments will need to be long-lived, agent-driven, and support a variety of shapes.",
       date:     "Dec 2025",
       datetime: "2025-12",
@@ -76,147 +82,29 @@ window.SITE = {
             list: "ul",
             items: [
               {
-                lead: "Benchmarks.",
-                sub:  `How do you create a benchmark case that can be verified deterministically? A lot of benchmarks have answered this question by making the problem as narrow as possible, and thus easy to 'verify'. Think verifying a fill-in-the-blank vs. an essay.`,
+                lead: "Benchmarks",
+                text: `How do you create a benchmark case that can be verified deterministically? A lot of benchmarks have answered this question by making the problem as narrow as possible, and thus easy to 'verify'. Think assigning a score to a fill-in-the-blank vs. an essay.`,
               },
               {
                 lead: "Unit Testing",
-                sub:  `An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2. Not to mention, we need to assume the guy who built the B-2 did so by following a markdown file written by a second guy describing how he thinks a B-2 should look. Each step is characterized by a lossy materialization of intent from the previous step and a lack of a hard feedback loop.`,
+                text: `An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2. Not to mention, we need to assume the guy who built the B-2 did so by following a markdown file written by a second guy describing how he thinks a B-2 should look. Each step is characterized by a lossy materialization of intent from the previous step and a lack of a hard feedback loop.`,
               },
               {
                 lead: "Regression / Evals",
-                sub:  `A similar issue surfaces as benchmarks, only these will need to be more custom to individual agent deployments, and thus we may need an order of magnitude more. This is part of why process-shaped implementation projects will take off first. You can plug and play an Agent in your claims process against historical cases and quickly gauge how it will perform.`,
+                text: `A similar issue surfaces as benchmarks, only these will need to be more custom to individual agent deployments, and thus we may need an order of magnitude more. This is part of why process-shaped implementation projects will take off first. You can plug and play an agent in your claims process against historical cases and quickly gauge how it will perform.`,
               },
             ],
           },
-          `I believe that we will continue to want to answer "What do I make of this huge pile of code? Which model performs best for my use case in production?" and this becomes disproportionately harder as we scale what we're examining. Although, I do think this is not universally true. As Agents become increasingly competent at long-horizon decision-making, forecasting, and acting rationally, the less we should be asking "Is this patch good?" and the more we should be observing "Which agent is making the most money in our simulated marketplace?" or "How accurately does the agent predict the Mayor of Topeka in 1908 using newspaper clippings from the year leading up to the election, fed in incrementally so it can update a rolling prediction?" This of course leads to a different class of problems, but even these are experiments.`,
+          `I believe that we will continue to want to answer "What do I make of this huge pile of code? Which model performs best for my use case in production?" and this becomes disproportionately harder as we scale what we're examining. Although, I do think this is not universally true. As agents become increasingly competent at long-horizon decision-making, forecasting, and acting rationally, the less we should be asking "Is this patch good?" and the more we should be observing "Which agent is making the most money in our simulated marketplace?" or "How accurately does the agent predict the Mayor of Topeka in 1908 using newspaper clippings from the year leading up to the election, fed in incrementally so it can update a rolling prediction?" This of course leads to a different class of problems, but even these are experiments.`,
         ],
         what: {
           // Add a couple of sentences here as paragraph strings, e.g.:
           //   "Bucephalus runs experiments declared in YAML across parallel trials.",
           intro: [
           ],
-          yaml: `experiment:
-  id: rex_modal_8_worker_smoke
-  name: Rex Modal 8 Worker Smoke
-
-runtime:
-  compute: { backend: local-docker }
-  storage: { backend: local-fs, config: { root: .lab/runs/ } }
-  traces: { backend: local-stdout }
-  secrets:
-    - { name: OPENAI_API_KEY, from: env }
-  network:
-    task_sandbox: full
-    agent: full
-
-matrix:
-  variants:
-    - id: rex_standard
-      baseline: true
-      config:
-        model_provider: openai
-        model: gpt-5-nano
-        agent_type: standard
-        provider_env_binding: openai=OPENAI_API_KEY
-    - id: rex_coding
-      config:
-        model_provider: openai
-        model: gpt-5-nano
-        agent_type: coding
-        provider_env_binding: openai=OPENAI_API_KEY
-  tasks:
-    source: file
-    path: cases.jsonl
-  repeats: 3
-  seeds: [1, 2, 3]
-
-scheduling:
-  max_concurrency: 8
-  shuffle_tasks: true
-  random_seed: 20260521
-  comparison: paired
-
-stages:
-  case:
-    interface: writable_workspace
-    workspace:
-      source: container_image
-      image: { from: case_row }
-      workdir: { from: case_row }
-  agent:
-    image: docker.io/jevnishioka1/agentlab-rex-modal@sha256:056337363994a9a9c8cff4a0655bdd1da7ed9c64ff8944f38265c0724c8424d7
-    command:
-      - bun
-      - /opt/agent/packages/infra/harness-daemon/bin/rex.ts
-      - run
-      - --input
-      - Read the JSON file pointed to by the AGENTLAB_TRIAL_INPUT_PATH environment variable, find the task or case prompt inside it, and answer that prompt. If the file has no prompt, write a short AgentLab preflight acknowledgment.
-      - --output
-      - /agentlab/out/result.json
-      - --events
-      - __AGENTLAB_EVENT_PATH_rex_events__
-      - --working-dir
-      - /workspace/task
-      - --provider
-      - $model_provider
-      - --model
-      - $model
-      - --agent-type
-      - $agent_type
-      - --provider-env
-      - $provider_env_binding
-      - --timeout-ms
-      - "90000"
-    env:
-      OPENAI_API_KEY: "$OPENAI_API_KEY"
-      HOME: /root
-    integration_level: cli_events
-    events:
-      - id: rex_events
-        path: /agentlab/out/rex-events.jsonl
-        format: jsonl
-        mode: jsonl
-        ingest: true
-        retain_raw: true
-    outputs:
-      result:
-        capture:
-          type: file
-          path: /agentlab/out/result.json
-          format: json
-          required: true
-  execution:
-    agent_site: agent_container
-  grader:
-    strategy: none
-
-metrics:
-  - id: latency_ms
-    source: { type: agent_response, pointer: /usage/latency_ms }
-    direction: minimize
-    primary: true
-  - id: model_calls
-    source: { type: agent_response, pointer: /usage/model_calls }
-    direction: minimize
-  - id: tool_calls
-    source: { type: agent_response, pointer: /usage/tool_calls }
-    direction: minimize
-  - id: tokens_in
-    source: { type: agent_response, pointer: /usage/tokens_in }
-    direction: minimize
-  - id: tokens_out
-    source: { type: agent_response, pointer: /usage/tokens_out }
-    direction: minimize
-
-policy:
-  timeout_ms: 120000
-  sanitization_profile: perf_benchmark
-  task_sandbox: {}
-`,
           diagram: {
             src: "projects/bucephalus/single-trial.svg",
-            alt: "Architecture of a single Bucephalus trial: a host-side runner and supervisor, a backend trial container running the agent app and grading script, and a shared workspace backed by R2.",
+            alt: "Bucephalus architecture — a host-side runner and supervisor, a backend trial container running the agent app and grading script, and a shared workspace backed by R2.",
             caption: "A single trial — ① the runner starts a supervisor, ② which launches the agent in a trial container, ③ the agent writes to the shared workspace (R2), ④ patch extracted from workspace, ⑤ execute grader with patch, ⑥ and results persist to SQLite.",
           },
         },
@@ -249,8 +137,8 @@ policy:
             list: "ul",
             items: [
               `Sandboxing an agent with the Bucephalus binary, documentation, an agent application, and a benchmark. I measured how often and how quickly an agent could build an experiment and get it running. This is how I measured the clarity of my documentation and primitive design.`,
-              `SWE-Bench Lite with my filesystem agent. Unfortunately a lot of the cases were in the model training data.`,
-              `Ran an experiment to measure how using an Adversary + Revision stage could improve the quality of synthetic data.`,
+              `SWE-bench Lite with my filesystem agent. Unfortunately a lot of the cases were in the model training data.`,
+              `Ran an experiment to measure how using an adversary + revision stage could improve the quality of synthetic data.`,
             ],
           },
         ],
@@ -262,7 +150,6 @@ policy:
     {
       title:    "Nova",
       slug:     "nova",
-      subtitle: "Config-driven multi-agent runtime, on Bun.",
       body:     "Model-agnostic harness for orchestrating filesystem agents and subagents.",
       date:     "Oct 2025",
       datetime: "2025-10",
@@ -275,31 +162,26 @@ policy:
             list: "ul",
             items: [
               {
-                lead: "Plan, Execute, Reflect as built-in program scaffolding.",
+                lead: "Plan, Execute, Reflect as built-in program scaffolding",
                 text: `This was restrictive, slow, and carried way too much task state in program memory. I had an epiphany which was "Let them cook". The harness should not be opinionated about 'how' the agent works. You provide the boundaries, or the 'what' it can do.`,
               },
               {
-                lead: "Testing with a slow model to save money.",
+                lead: "Testing with a slow model to save money",
                 text: `Shoutout to Z.ai. The GLM series is great, but they are SLOW. You will be tempted to use a subscription to a Chinese open-source lab when wasting tokens iterating early on. I would advise against it. This mistake was made worse by the API not supporting structured outputs, and the tool-calling accuracy I would call a 'mixed bag' if I were trying to be charitable. If I were trying to be negative, I would call it a 'mixed bag' because a blind man reaching into a mixed bag of my tool definitions would've pulled the right one out just as often. And he might even have remembered to fence his JSON.`,
               },
               {
-                lead: "Observability.",
+                lead: "Observability",
                 text: `If you don't have something for observing traces locally, build one. It will not take long. This is table stakes. Feedback loops.`,
               },
             ],
           },
         ],
-        decisions: [
-          {
-            heading: "Built before the harness problem was solved",
-            body:    `Nova predates Claude Code and Codex reaching production quality. At the time, no harness had solved filesystem agent orchestration in a way that felt trustworthy for real work. The problem was real and the tooling wasn't there, so it got built.`,
-          },
-          {
-            heading: "Trim to the core rather than ship half-baked features",
-            body:    `Had ambitions for additional capabilities, some of which were partially implemented. When Claude Code and Codex matured and the landscape shifted, the right call was to cut everything that wasn't solid and tighten what remained rather than maintain half-finished work. Knowing when to cut is the decision.`,
-          },
-        ],
-        demo:         null,
+        decisions: [],
+        demo: {
+          type: "image",
+          src:  "Screenshot 2026-05-22 at 1.11.57 PM (2).png",
+          alt:  "Nova agent monitor showing an active run with execution flow, tool calls, token counts, and touched files.",
+        },
         artifacts: [
           { label: "Source on GitHub", href: "https://github.com/nishiokj/Nova" },
         ],

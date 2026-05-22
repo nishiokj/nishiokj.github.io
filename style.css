@@ -238,14 +238,6 @@ main {
   outline: none;
 }
 
-.project-sub {
-  font-style: italic;
-  color: var(--muted);
-  margin: 0.1rem 0 0;
-  font-size: var(--size-body);
-  line-height: 1.3;
-}
-
 /* ---------------------------------------------------------------------------
    Experiments — three across, compact.
 --------------------------------------------------------------------------- */
@@ -416,19 +408,6 @@ main {
   color: var(--ink);
 }
 
-.project-detail-meta {
-  display: flex;
-  align-items: baseline;
-  gap: 1.25rem;
-}
-
-.project-detail-sub {
-  font-style: italic;
-  color: var(--muted);
-  margin: 0;
-  font-size: var(--size-body);
-}
-
 .project-detail-date {
   font-family: var(--serif-display);
   font-size: var(--size-caption);
@@ -540,7 +519,7 @@ main {
   width: 100%;
   height: auto;
   margin: 0 auto;
-  max-width: 24rem;
+  max-width: 64rem;
 }
 
 /* YAML config sample (What it is) */
@@ -573,6 +552,12 @@ main {
 .what-figure-row .chart {
   flex: 1 1 16rem;
   min-width: 0;
+  max-width: 24rem;
+}
+
+/* What it is — a standalone architecture diagram. Capped at the same
+   width as the diagram in .what-figure-row so both render at one scale. */
+.arch-diagram {
   max-width: 24rem;
 }
 

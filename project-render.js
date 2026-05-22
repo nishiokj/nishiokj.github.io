@@ -11,7 +11,7 @@
     }[c]));
 
   // Renders a `blocks` array of mixed strings (paragraphs) and { list, items } objects.
-  // List items may be plain strings or { lead, text, sub } objects for sectioned prose.
+  // List items may be plain strings or { lead, text } objects for sectioned prose.
   function renderProseBlocks(blocks) {
     return blocks.map((block) => {
       if (typeof block === "string") {
@@ -26,7 +26,7 @@
         const heading = item.lead
           ? `<h3 class="prose-subhead">${esc(item.lead.replace(/\.$/, ""))}</h3>`
           : "";
-        const body = [item.text, item.sub].filter(Boolean).join(" ");
+        const body = item.text || "";
         return `<li class="prose-section-item">${heading}${body ? `<p class="prose-subcopy">${esc(body)}</p>` : ""}</li>`;
       }).join("");
       const sectionClass = sectioned ? " prose-list--sectioned" : "";
@@ -70,26 +70,30 @@
       whatHtml += renderProseBlocks(d.what.intro);
     }
     if (d.what.yaml || d.what.diagram) {
-      let row = "";
-      if (d.what.yaml) {
-        row += `<pre class="arch-yaml"><code>${esc(d.what.yaml)}</code></pre>`;
-      }
-      if (d.what.diagram) {
-        const cap = d.what.diagram.caption
-          ? `<figcaption class="chart-caption">${esc(d.what.diagram.caption)}</figcaption>`
+      const diagramFigure = (dg) => {
+        const cap = dg.caption
+          ? `<figcaption class="chart-caption">${esc(dg.caption)}</figcaption>`
           : "";
-        row += `<figure class="chart"><img src="${esc(d.what.diagram.src)}" alt="${esc(d.what.diagram.alt || "Architecture diagram")}" />${cap}</figure>`;
+        return `<figure class="chart"><img src="${esc(dg.src)}" alt="${esc(dg.alt || "Architecture diagram")}" />${cap}</figure>`;
+      };
+      if (d.what.yaml) {
+        // YAML config, with the diagram (if any) sitting alongside it.
+        let row = `<pre class="arch-yaml"><code>${esc(d.what.yaml)}</code></pre>`;
+        if (d.what.diagram) row += diagramFigure(d.what.diagram);
+        whatHtml += `<div class="what-figure-row">${row}</div>`;
+      } else {
+        // Diagram on its own — held at its natural width by .arch-diagram.
+        whatHtml += `<div class="arch-diagram">${diagramFigure(d.what.diagram)}</div>`;
       }
-      whatHtml += `<div class="what-figure-row">${row}</div>`;
     }
     document.querySelector("[data-what]").innerHTML = whatHtml;
   }
 
   // Decisions
   const decisionsEl = document.querySelector("[data-decisions]");
-  if (!d.decisions || d.decisions.length === 0) {
-    decisionsEl.innerHTML = `<div class="placeholder-box">Add decision entries to content.js under this project's <code>detail.decisions</code> array.</div>`;
-  } else {
+  if (d.decisions && d.decisions.length > 0) {
+    document.querySelector("[data-decisions-rule]").hidden = false;
+    document.querySelector("[data-decisions-section]").hidden = false;
     decisionsEl.innerHTML = d.decisions
       .map((dec, i) => `
         <div class="decision-item">

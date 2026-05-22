@@ -1,0 +1,51 @@
+%%{init: {
+  "look": "handDrawn",
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "Charter, Georgia, serif",
+    "primaryColor": "#F6F1E6",
+    "primaryBorderColor": "#1B1B1F",
+    "primaryTextColor": "#1B1B1F",
+    "lineColor": "#1B1B1F",
+    "textColor": "#1B1B1F",
+    "clusterBkg": "#E3DBC9",
+    "clusterBorder": "#1B1B1F",
+    "edgeLabelBackground": "#F6F1E6"
+  }
+}}%%
+flowchart TB
+  agent["Agent app"]
+
+  subgraph iface[" "]
+    sdk["SDKs"]
+  end
+
+  subgraph dispatch[" "]
+    direct["Direct call"]
+    broker[("Broker")]
+    worker["Worker"]
+  end
+
+  server["Substrate server"]
+  resolver["Policy + workspace<br/>resolver"]
+
+  subgraph stores["Storage"]
+    sessions[("Sessions")]
+    fs[("Sandbox")]
+    ledger[("Effect ledger")]
+    artifacts[("Artifacts")]
+  end
+
+  agent -->|"tool call"| sdk
+  sdk --> direct
+  sdk -.-> broker
+  broker --> worker
+  direct --> server
+  worker --> server
+  server --> resolver
+  resolver --> fs
+  server --> sessions
+  server --> ledger
+  server --> artifacts
+
+  linkStyle 0 color:#A6342B
