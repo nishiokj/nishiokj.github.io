@@ -65,6 +65,7 @@
   if (d.what && (d.what.intro?.length > 0 || d.what.yaml || d.what.diagram)) {
     document.querySelector("[data-what-rule]").hidden = false;
     document.querySelector("[data-what-section]").hidden = false;
+    document.querySelector("[data-what-label]").textContent = d.what.label || "What it is";
     let whatHtml = "";
     if (d.what.intro?.length > 0) {
       whatHtml += renderProseBlocks(d.what.intro);
@@ -110,12 +111,16 @@
   if (d.demo) {
     document.querySelector("[data-demo-rule]").hidden = false;
     document.querySelector("[data-demo-section]").hidden = false;
+    document.querySelector("[data-demo-label]").textContent = d.demoLabel || "Demo";
     const demoEl = document.querySelector("[data-demo]");
-    if (d.demo.type === "video") {
-      demoEl.innerHTML = `<video src="${esc(d.demo.src)}" controls class="demo-media"></video>`;
-    } else {
-      demoEl.innerHTML = `<img src="${esc(d.demo.src)}" alt="${esc(d.demo.alt || "Demo")}" class="demo-media" />`;
-    }
+    const demoItems = Array.isArray(d.demo) ? d.demo : [d.demo];
+    const demoGridClass = demoItems.length > 1 ? "demo-grid demo-grid--multi" : "demo-grid";
+    demoEl.innerHTML = `<div class="${demoGridClass}">${demoItems.map((demo) => {
+      const media = demo.type === "video"
+        ? `<video src="${esc(demo.src)}" controls class="demo-media"></video>`
+        : `<img src="${esc(demo.src)}" alt="${esc(demo.alt || "Demo")}" class="demo-media" />`;
+      return `<div class="demo-tile">${media}</div>`;
+    }).join("")}</div>`;
   }
 
   // Experiments (optional — only shown if detail.experiments is populated)

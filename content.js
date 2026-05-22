@@ -11,7 +11,7 @@
 window.SITE = {
   name: "Jevin Nishioka",
 
-  bio: "SWE consultant shipping production cloud infrastructure for financial services and defense clients. Nights and weekends go into AI agent runtimes, evaluation harnesses, and synthetic-data pipelines.",
+  bio: "This is a porfolio of what I have been working on recently. Feel free to reach out to me with any questions or inquiries.",
 
   links: [
     { label: "GitHub",   href: "https://github.com/nishiokj" },
@@ -30,6 +30,7 @@ window.SITE = {
       detail: {
         // Add why / what / decisions / demo / artifacts. See the Bucephalus entry for the full shape.
         what: {
+          label: "Design",
           intro: [
           ],
           diagram: {
@@ -63,7 +64,13 @@ window.SITE = {
             body:    `Ran a series of epistemic experiments varying generators, adversaries, and judges across different model combinations. The adversarial revision + LLM-as-Judge pattern consistently produced higher rates of quality gate acceptance compared to direct generation. The results held across combinations, suggesting the mechanism is robust rather than model-specific.`,
           },
         ],
-        demo:         null,
+        demo: [
+          {
+            type: "image",
+            src:  "Screenshot 2026-04-03 at 7.17.30 PM.png",
+            alt:  "Genie interface screenshot from April 3.",
+          },
+        ],
         artifacts: [
           { label: "Source on GitHub", href: "https://github.com/nishiokj/synthetic-data-generator" },
         ],
@@ -98,6 +105,7 @@ window.SITE = {
           `I believe that we will continue to want to answer "What do I make of this huge pile of code? Which model performs best for my use case in production?" and this becomes disproportionately harder as we scale what we're examining. Although, I do think this is not universally true. As agents become increasingly competent at long-horizon decision-making, forecasting, and acting rationally, the less we should be asking "Is this patch good?" and the more we should be observing "Which agent is making the most money in our simulated marketplace?" or "How accurately does the agent predict the Mayor of Topeka in 1908 using newspaper clippings from the year leading up to the election, fed in incrementally so it can update a rolling prediction?" This of course leads to a different class of problems, but even these are experiments.`,
         ],
         what: {
+          label: "Design",
           // Add a couple of sentences here as paragraph strings, e.g.:
           //   "Bucephalus runs experiments declared in YAML across parallel trials.",
           intro: [
@@ -127,21 +135,6 @@ window.SITE = {
           },
         ],
         demo: null,
-        experiments: [
-          { src: "charts/synth-adversary-awareness.svg", alt: "Forest plot: committed rate across 8 synth-data generator variants on 10 cases." },
-          { src: "charts/kimi26-vs-gpt55-low.svg",       alt: "Forest plot: Kimi 2.6 versus GPT-5.5 low on a SWE-bench tail smoke test." },
-          { src: "charts/gpt54-vs-gpt55.svg",            alt: "Forest plot: GPT-5.4 medium versus GPT-5.5 low on the same tail case." },
-        ],
-        otherExperiments: [
-          {
-            list: "ul",
-            items: [
-              `Sandboxing an agent with the Bucephalus binary, documentation, an agent application, and a benchmark. I measured how often and how quickly an agent could build an experiment and get it running. This is how I measured the clarity of my documentation and primitive design.`,
-              `SWE-bench Lite with my filesystem agent. Unfortunately a lot of the cases were in the model training data.`,
-              `Ran an experiment to measure how using an adversary + revision stage could improve the quality of synthetic data.`,
-            ],
-          },
-        ],
         artifacts: [
           { label: "Source on GitHub", href: "https://github.com/nishiokj/AgentLab" },
         ],
@@ -177,11 +170,19 @@ window.SITE = {
           },
         ],
         decisions: [],
-        demo: {
-          type: "image",
-          src:  "Screenshot 2026-05-22 at 1.11.57 PM (2).png",
-          alt:  "Nova agent monitor showing an active run with execution flow, tool calls, token counts, and touched files.",
-        },
+        demo: [
+          {
+            type: "image",
+            src:  "nova-tui.png",
+            alt:  "Nova TUI interface.",
+          },
+          {
+            type: "image",
+            src:  "nova-monitor.png",
+            alt:  "Nova agent monitor showing an active run with execution flow, tool calls, token counts, and touched files.",
+          },
+        ],
+        demoLabel: "Screenshots",
         artifacts: [
           { label: "Source on GitHub", href: "https://github.com/nishiokj/Nova" },
         ],

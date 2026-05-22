@@ -514,12 +514,36 @@ main {
 }
 
 /* Demo */
+.demo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 24rem);
+  gap: 1rem;
+  align-items: start;
+  margin: 0;
+}
+
+.demo-grid--multi {
+  grid-template-columns: repeat(2, minmax(0, 24rem));
+}
+
 .demo-media {
   display: block;
   width: 100%;
   height: auto;
-  margin: 0 auto;
-  max-width: 64rem;
+}
+
+.demo-tile {
+  overflow: hidden;
+}
+
+.demo-tile .demo-media {
+  max-width: none;
+}
+
+@media (max-width: 48rem) {
+  .demo-grid--multi {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* YAML config sample (What it is) */
