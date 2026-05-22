@@ -11,24 +11,26 @@
     }[c]));
 
   // Renders a `blocks` array of mixed strings (paragraphs) and { list, items } objects.
-  // List items may be plain strings or { lead, text, sub } objects for nested bullets.
+  // List items may be plain strings or { lead, text, sub } objects for sectioned prose.
   function renderProseBlocks(blocks) {
     return blocks.map((block) => {
       if (typeof block === "string") {
         return `<p class="prose-p">${esc(block)}</p>`;
       }
       const tag = block.list === "ol" ? "ol" : "ul";
+      const sectioned = block.items.some((item) => typeof item !== "string" && item.lead);
       const items = block.items.map((item) => {
         if (typeof item === "string") {
           return `<li>${esc(item)}</li>`;
         }
-        let inner = "";
-        if (item.lead) inner += `<strong>${esc(item.lead)}</strong>`;
-        if (item.text) inner += `${item.lead ? " " : ""}${esc(item.text)}`;
-        if (item.sub)  inner += `<ul class="prose-sub"><li>${esc(item.sub)}</li></ul>`;
-        return `<li>${inner}</li>`;
+        const heading = item.lead
+          ? `<h3 class="prose-subhead">${esc(item.lead.replace(/\.$/, ""))}</h3>`
+          : "";
+        const body = [item.text, item.sub].filter(Boolean).join(" ");
+        return `<li class="prose-section-item">${heading}${body ? `<p class="prose-subcopy">${esc(body)}</p>` : ""}</li>`;
       }).join("");
-      return `<${tag} class="prose-list prose-list--${tag}">${items}</${tag}>`;
+      const sectionClass = sectioned ? " prose-list--sectioned" : "";
+      return `<${tag} class="prose-list prose-list--${tag}${sectionClass}">${items}</${tag}>`;
     }).join("");
   }
 
