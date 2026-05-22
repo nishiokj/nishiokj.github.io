@@ -22,11 +22,23 @@ window.SITE = {
   // Projects render newest-first. Add a `slug` to get a detail page at project.html?slug=...
   projects: [
     {
+      title:    "Substrate",
+      slug:     "substrate",
+      subtitle: "Language-agnostic tool execution for agent apps.",
+      body:     "Rust-based tool execution substrate that separates an agent's control layer from execution, so tool implementations don't have to be rebuilt per language and product.",
+      date:     "May 2026",
+      datetime: "2026-05",
+      detail: {
+        // Add why / what / decisions / demo / artifacts. See the Bucephalus entry for the full shape.
+        decisions: [],
+        artifacts: [],
+      },
+    },
+    {
       title:    "Genie",
       slug:     "synthetic-data-pipeline",
       subtitle: "Staged generator for benchmark cases.",
       body:     "Opinionated data generation workflow based on Adversarial revision + LLM-as-Judge pattern, which aids in reducing common quality issues in synthetic data.",
-      artifact: null,   // { src: "...", alt: "..." }
       date:     "Apr 2026",
       datetime: "2026-04",
       detail: {
@@ -54,8 +66,7 @@ window.SITE = {
       title:    "Bucephalus",
       slug:     "agentlab",
       subtitle: "Experiment Runner for controlled agent evaluation.",
-      body:     "Durable Experiment Runner that can scale tasks in parallel while targeting Docker Daemon or Modal backends. Custom DSL + Transport Envelopes enable declarative configurations.",
-      artifact: null,   // { src: "...", alt: "..." }
+      body:     "Rust-based experiment harness designed around the idea that experiments will need to be long-lived, agent-driven, and support a variety of shapes.",
       date:     "Dec 2025",
       datetime: "2025-12",
       detail: {
@@ -66,15 +77,15 @@ window.SITE = {
             items: [
               {
                 lead: "Benchmarks.",
-                sub:  `How do you create a benchmark task that can be verified deterministically? A lot of benchmarks have answered this question by making the problem as narrow as possible, and thus easy to 'verify'. Think verifying a fill-in-the-blank vs. an essay.`,
+                sub:  `How do you create a benchmark case that can be verified deterministically? A lot of benchmarks have answered this question by making the problem as narrow as possible, and thus easy to 'verify'. Think verifying a fill-in-the-blank vs. an essay.`,
               },
               {
                 lead: "Unit Testing",
-                sub:  `How do we know that passing unit tests actually 'verify' that a code base is in a goal state when the agent generated the code and the test suite? An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2. Not to mention, we need to assume the guy who built the B-2 did so by following a markdown file written by a second guy describing how he thinks a B-2 should look. Each step is characterized by a lossy materialization of intent from the previous step and a lack of a hard feedback loop.`,
+                sub:  `An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2. Not to mention, we need to assume the guy who built the B-2 did so by following a markdown file written by a second guy describing how he thinks a B-2 should look. Each step is characterized by a lossy materialization of intent from the previous step and a lack of a hard feedback loop.`,
               },
               {
                 lead: "Regression / Evals",
-                sub:  `Same idea. We need Benchmark-like shapes here but individual enterprises need their own for their use cases. This is part of why process-shaped implementation projects will take off first. You can plug and play an Agent in your claims process against historical cases and quickly gauge how it will perform.`,
+                sub:  `A similar issue surfaces as benchmarks, only these will need to be more custom to individual agent deployments, and thus we may need an order of magnitude more. This is part of why process-shaped implementation projects will take off first. You can plug and play an Agent in your claims process against historical cases and quickly gauge how it will perform.`,
               },
             ],
           },
@@ -86,50 +97,128 @@ window.SITE = {
           intro: [
           ],
           yaml: `experiment:
-  id: swebench_claude_cli
-  name: SWE-Bench Claude CLI
+  id: rex_modal_8_worker_smoke
+  name: Rex Modal 8 Worker Smoke
 
 runtime:
-  compute: { backend: local-docker, config: { max_parallel: 4 } }
-  storage: { backend: local-fs }
-  traces:  { backend: local-stdout }
+  compute: { backend: local-docker }
+  storage: { backend: local-fs, config: { root: .lab/runs/ } }
+  traces: { backend: local-stdout }
   secrets:
-    - { name: ANTHROPIC_API_KEY, from: env }
+    - { name: OPENAI_API_KEY, from: env }
   network:
-    task_sandbox: none
+    task_sandbox: full
     agent: full
 
 matrix:
   variants:
-    - id: baseline
+    - id: rex_standard
       baseline: true
-      config: { model: claude-sonnet-4-6 }
-  tasks: { source: file, path: swebench_mini.jsonl }
-  repeats: 1
+      config:
+        model_provider: openai
+        model: gpt-5-nano
+        agent_type: standard
+        provider_env_binding: openai=OPENAI_API_KEY
+    - id: rex_coding
+      config:
+        model_provider: openai
+        model: gpt-5-nano
+        agent_type: coding
+        provider_env_binding: openai=OPENAI_API_KEY
+  tasks:
+    source: file
+    path: cases.jsonl
+  repeats: 3
+  seeds: [1, 2, 3]
 
 scheduling:
-  max_concurrency: 4
+  max_concurrency: 8
+  shuffle_tasks: true
+  random_seed: 20260521
   comparison: paired
 
-trial_runtime:
-  task:
+stages:
+  case:
     interface: writable_workspace
     workspace:
       source: container_image
-      image: { from: task_row }
+      image: { from: case_row }
+      workdir: { from: case_row }
   agent:
-    image: ghcr.io/jn/cli-agent:0.4
-    command: ["agent", "run", "--model", "$model"]
-    env: { ANTHROPIC_API_KEY: "$ANTHROPIC_API_KEY" }
+    image: docker.io/jevnishioka1/agentlab-rex-modal@sha256:056337363994a9a9c8cff4a0655bdd1da7ed9c64ff8944f38265c0724c8424d7
+    command:
+      - bun
+      - /opt/agent/packages/infra/harness-daemon/bin/rex.ts
+      - run
+      - --input
+      - Read the JSON file pointed to by the AGENTLAB_TRIAL_INPUT_PATH environment variable, find the task or case prompt inside it, and answer that prompt. If the file has no prompt, write a short AgentLab preflight acknowledgment.
+      - --output
+      - /agentlab/out/result.json
+      - --events
+      - __AGENTLAB_EVENT_PATH_rex_events__
+      - --working-dir
+      - /workspace/task
+      - --provider
+      - $model_provider
+      - --model
+      - $model
+      - --agent-type
+      - $agent_type
+      - --provider-env
+      - $provider_env_binding
+      - --timeout-ms
+      - "90000"
+    env:
+      OPENAI_API_KEY: "$OPENAI_API_KEY"
+      HOME: /root
+    integration_level: cli_events
+    events:
+      - id: rex_events
+        path: /agentlab/out/rex-events.jsonl
+        format: jsonl
+        mode: jsonl
+        ingest: true
+        retain_raw: true
     outputs:
-      patch: { capture: { type: workspace_diff } }
+      result:
+        capture:
+          type: file
+          path: /agentlab/out/result.json
+          format: json
+          required: true
+  execution:
+    agent_site: agent_container
   grader:
-    strategy: in_task_runtime
+    strategy: none
 
 metrics:
-  - { id: resolved, source: output, json_pointer: /resolved }
-  - { id: turns, source: events, event_type: model_call_end, aggregate: count }
+  - id: latency_ms
+    source: { type: agent_response, pointer: /usage/latency_ms }
+    direction: minimize
+    primary: true
+  - id: model_calls
+    source: { type: agent_response, pointer: /usage/model_calls }
+    direction: minimize
+  - id: tool_calls
+    source: { type: agent_response, pointer: /usage/tool_calls }
+    direction: minimize
+  - id: tokens_in
+    source: { type: agent_response, pointer: /usage/tokens_in }
+    direction: minimize
+  - id: tokens_out
+    source: { type: agent_response, pointer: /usage/tokens_out }
+    direction: minimize
+
+policy:
+  timeout_ms: 120000
+  sanitization_profile: perf_benchmark
+  task_sandbox: {}
 `,
+          diagram: {
+            src: "projects/bucephalus/single-trial.svg",
+            alt: "Architecture of a single Bucephalus trial: a host-side runner and supervisor, a backend trial container running the agent app and grading script, and a shared workspace backed by R2.",
+            caption: "A single trial — ① the runner starts a supervisor, ② which launches the agent in a trial container, ③ the agent writes to the shared workspace (R2), ④ patch extracted from workspace, ⑤ execute grader with patch, ⑥ and results persist to SQLite.",
+          },
         },
         decisions: [
           {
@@ -141,26 +230,26 @@ metrics:
             body:    `Experiments need to be able to run for hours or possibly even days. Memory safety is crucial.`,
           },
           {
-            heading: "Runtimes, Externals, Ephemerals",
-            body:    `Runtimes are likely where a given task is executed. Often your agent container. Externals are the external deps whose state is outside of our jurisdiction. Declaring these is important if you need hard accounting of network egress, credentials, tokens, etc. Ephemerals are things that exist in a fixed scope owned by the Experiment Runner. Think sidecars, MCP servers, memory systems. The glue that makes this work is the Transport Envelope. This is what allows us to be purely declarative for most use cases despite the diversity of shape at the boundary of the primitives. The envelopes carry the task prompt to the agent's container, and patches / results back to graders when the grader is its own Runtime.`,
+            heading: "Stages, Ephemerals, Externals",
+            body:    `A trial runs against a case: a declared problem, unwrapped and materialized into a workspace. The trial runtime is the chain of stages that operate on that workspace — the agent, the grader, any others — wired by the runner, which carries each stage's output into the next as a Transport Envelope. A stage declares only its own input and output and never knows what runs before or after it. That wiring is the line between the three primitives. A Stage is a link in the chain — transport is ours. An Ephemeral runs off the chain, but the runner still owns its lifecycle: sidecars, MCP servers, memory systems, spun up for the trial and torn down with it. An External is off the chain and outside our jurisdiction entirely — network egress, credentials, third-party APIs; declaring them is what gives you hard accounting of everything that crossed the boundary. So the test is two questions: is it a link we wired? Then it's a Stage. If not, do we own its lifecycle? Ephemeral if yes, External if no. The workspace itself is none of the three — not machinery, but the subject the machinery acts on. The Transport Envelope is the uniform shape that keeps all of this declarative even as the things at the boundary diverge.`,
           },
           {
             heading: "Transactional trial results",
-            body:    `Recoverability exists from the perspective of the Experiment. If the runner is shut down, the mid-flight trials are not recovered as in-progress, and their partial work will be rolled back. Why? Reverting Trial-level state is very difficult, and even if you succeed, you are likely to have a cache miss which confounds the trial result anyway. Much better to just have a clean slate.`,
+            body:    `Recovery happens at the experiment level, not the trial. If the runner is shut down, in-progress trials are not resumed — their partial work is rolled back. Reverting a trial's mid-flight state is hard, and even if you manage it, you'll likely hit a cache miss that confounds the result anyway. A clean slate is simpler and more trustworthy.`,
           },
         ],
         demo: null,
         experiments: [
-          { src: "charts/synth-adversary-awareness.svg", alt: "Forest plot: committed rate across 8 synth-data generator variants on 10 tasks." },
+          { src: "charts/synth-adversary-awareness.svg", alt: "Forest plot: committed rate across 8 synth-data generator variants on 10 cases." },
           { src: "charts/kimi26-vs-gpt55-low.svg",       alt: "Forest plot: Kimi 2.6 versus GPT-5.5 low on a SWE-bench tail smoke test." },
-          { src: "charts/gpt54-vs-gpt55.svg",            alt: "Forest plot: GPT-5.4 medium versus GPT-5.5 low on the same tail task." },
+          { src: "charts/gpt54-vs-gpt55.svg",            alt: "Forest plot: GPT-5.4 medium versus GPT-5.5 low on the same tail case." },
         ],
         otherExperiments: [
           {
             list: "ul",
             items: [
               `Sandboxing an agent with the Bucephalus binary, documentation, an agent application, and a benchmark. I measured how often and how quickly an agent could build an experiment and get it running. This is how I measured the clarity of my documentation and primitive design.`,
-              `SWE-Bench Lite with my filesystem agent. Unfortunately a lot of the tasks were in the model training data.`,
+              `SWE-Bench Lite with my filesystem agent. Unfortunately a lot of the cases were in the model training data.`,
               `Ran an experiment to measure how using an Adversary + Revision stage could improve the quality of synthetic data.`,
             ],
           },
@@ -175,7 +264,6 @@ metrics:
       slug:     "nova",
       subtitle: "Config-driven multi-agent runtime, on Bun.",
       body:     "Model-agnostic harness for orchestrating filesystem agents and subagents.",
-      artifact: null,   // { src: "...", alt: "..." }
       date:     "Oct 2025",
       datetime: "2025-10",
       detail: {

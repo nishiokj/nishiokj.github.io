@@ -58,16 +58,27 @@
     document.querySelector("[data-why]").innerHTML = renderProseBlocks(d.why);
   }
 
-  // What it is (optional) — supports an intro prose array and a YAML config sample
-  if (d.what && (d.what.intro?.length > 0 || d.what.yaml)) {
+  // What it is (optional) — supports an intro prose array, a YAML config sample,
+  // and an architecture diagram shown alongside the YAML.
+  if (d.what && (d.what.intro?.length > 0 || d.what.yaml || d.what.diagram)) {
     document.querySelector("[data-what-rule]").hidden = false;
     document.querySelector("[data-what-section]").hidden = false;
     let whatHtml = "";
     if (d.what.intro?.length > 0) {
       whatHtml += renderProseBlocks(d.what.intro);
     }
-    if (d.what.yaml) {
-      whatHtml += `<pre class="arch-yaml"><code>${esc(d.what.yaml)}</code></pre>`;
+    if (d.what.yaml || d.what.diagram) {
+      let row = "";
+      if (d.what.yaml) {
+        row += `<pre class="arch-yaml"><code>${esc(d.what.yaml)}</code></pre>`;
+      }
+      if (d.what.diagram) {
+        const cap = d.what.diagram.caption
+          ? `<figcaption class="chart-caption">${esc(d.what.diagram.caption)}</figcaption>`
+          : "";
+        row += `<figure class="chart"><img src="${esc(d.what.diagram.src)}" alt="${esc(d.what.diagram.alt || "Architecture diagram")}" />${cap}</figure>`;
+      }
+      whatHtml += `<div class="what-figure-row">${row}</div>`;
     }
     document.querySelector("[data-what]").innerHTML = whatHtml;
   }

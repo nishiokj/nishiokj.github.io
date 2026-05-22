@@ -28,22 +28,25 @@
 
   // Projects
   document.querySelector("[data-projects]").innerHTML = s.projects
-    .map((p) => {
-      const title = p.slug
-        ? `<a href="project.html?slug=${esc(p.slug)}">${esc(p.title)}</a>`
+    .map((p, i) => {
+      const detailHref = p.slug
+        ? `project.html?slug=${esc(p.slug)}`
         : p.href
-        ? `<a href="${esc(p.href)}" target="_blank" rel="noopener">${esc(p.title)}</a>`
+        ? esc(p.href)
+        : null;
+      const external = p.href && !p.slug;
+      const linkAttrs = external ? ' target="_blank" rel="noopener"' : "";
+      const title = detailHref
+        ? `<a href="${detailHref}"${linkAttrs}>${esc(p.title)}</a>`
         : esc(p.title);
-      const artifact = p.artifact
-        ? `<div class="project-artifact"><img src="${esc(p.artifact.src)}" alt="${esc(p.artifact.alt)}" class="artifact-img" /></div>`
-        : "";
+      const num = String(i + 1).padStart(2, "0");
       return `
       <div class="project">
+        <span class="project-num">${num}</span>
         <dt class="project-title">
           <h2>${title}</h2>
         </dt>
         <time class="project-date" datetime="${esc(p.datetime)}">${esc(nb(p.date))}</time>
-        ${artifact}
         <dd class="project-body">${esc(p.body)}${p.slug ? ` <a href="project.html?slug=${esc(p.slug)}" class="read-more">Read more →</a>` : ""}</dd>
       </div>`;
     })
