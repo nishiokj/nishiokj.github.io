@@ -66,8 +66,7 @@ window.SITE = {
         ],
         demo: [
           {
-            type: "image",
-            src:  "Screenshot 2026-04-03 at 7.17.30 PM.png",
+            type: "image", src:  "Screenshot 2026-04-03 at 7.17.30 PM.png",
             alt:  "Genie interface screenshot from April 3.",
           },
         ],
@@ -97,7 +96,7 @@ window.SITE = {
                 text: `An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2. Not to mention, we need to assume the guy who built the B-2 did so by following a markdown file written by a second guy describing how he thinks a B-2 should look. Each step is characterized by a lossy materialization of intent from the previous step and a lack of a hard feedback loop.`,
               },
               {
-                lead: "Regression / Evals",
+                lead: "Evals",
                 text: `A similar issue surfaces as benchmarks, only these will need to be more custom to individual agent deployments, and thus we may need an order of magnitude more. This is part of why process-shaped implementation projects will take off first. You can plug and play an agent in your claims process against historical cases and quickly gauge how it will perform.`,
               },
             ],
