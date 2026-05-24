@@ -10,6 +10,35 @@
       "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
     }[c]));
 
+  function renderCode(code, language) {
+    const escaped = esc(code);
+    if (language === "py") {
+      return escaped.replace(
+        /(#.*$)|(&quot;.*?&quot;|&#39;.*?&#39;)|\b(from|import|def|for|in|with|as|return|if|else|None|True|False)\b|\b([A-Za-z_][A-Za-z0-9_]*)(?=\()/gm,
+        (match, comment, string, keyword, fn) => {
+          if (comment) return `<span class="tok-comment">${comment}</span>`;
+          if (string) return `<span class="tok-string">${string}</span>`;
+          if (keyword) return `<span class="tok-keyword">${keyword}</span>`;
+          if (fn) return `<span class="tok-fn">${fn}</span>`;
+          return match;
+        },
+      );
+    }
+    if (language === "ts" || language === "js") {
+      return escaped.replace(
+        /(\/\/.*$)|(&quot;.*?&quot;|&#39;.*?&#39;|`.*?`)|\b(import|from|const|let|var|async|await|function|for|of|try|finally|return|if|else)\b|\b([A-Za-z_$][A-Za-z0-9_$]*)(?=\()/gm,
+        (match, comment, string, keyword, fn) => {
+          if (comment) return `<span class="tok-comment">${comment}</span>`;
+          if (string) return `<span class="tok-string">${string}</span>`;
+          if (keyword) return `<span class="tok-keyword">${keyword}</span>`;
+          if (fn) return `<span class="tok-fn">${fn}</span>`;
+          return match;
+        },
+      );
+    }
+    return escaped;
+  }
+
   // Renders a `blocks` array of mixed strings (paragraphs) and { list, items } objects.
   // List items may be plain strings or { lead, text } objects for sectioned prose.
   function renderProseBlocks(blocks) {
@@ -127,16 +156,27 @@
   if (d.samples && d.samples.length > 0) {
     document.querySelector("[data-samples-rule]").hidden = false;
     document.querySelector("[data-samples-section]").hidden = false;
-    document.querySelector("[data-samples]").innerHTML = d.samples
-      .map((sample) => `
-        <figure class="sample-block">
-          <figcaption class="sample-caption">
-            <span>${esc(sample.label)}</span>
-            ${sample.href ? `<a href="${esc(sample.href)}" target="_blank" rel="noopener">Open file</a>` : ""}
-          </figcaption>
-          <pre class="sample-code"><code>${esc(sample.code)}</code></pre>
-        </figure>`)
-      .join("");
+    const defaultIndex = Math.max(0, d.samples.findIndex((sample) => sample.language === "py"));
+    const sampleTabs = d.samples.map((sample, index) => `
+      <button class="sample-tab${index === defaultIndex ? " is-active" : ""}" type="button" data-sample-tab="${index}">
+        ${esc(sample.language === "py" ? "Python" : sample.language === "ts" ? "TypeScript" : sample.language)}
+      </button>`).join("");
+    const samplePanels = d.samples.map((sample, index) => `
+      <pre class="sample-code" ${index === defaultIndex ? "" : "hidden"} data-sample-panel="${index}"><code>${renderCode(sample.code, sample.language)}</code></pre>`).join("");
+    document.querySelector("[data-samples]").innerHTML = `
+      <div class="sample-tabs" role="tablist">${sampleTabs}</div>
+      <div class="sample-panels">${samplePanels}</div>`;
+    document.querySelectorAll("[data-sample-tab]").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const index = tab.getAttribute("data-sample-tab");
+        document.querySelectorAll("[data-sample-tab]").forEach((node) => {
+          node.classList.toggle("is-active", node === tab);
+        });
+        document.querySelectorAll("[data-sample-panel]").forEach((panel) => {
+          panel.hidden = panel.getAttribute("data-sample-panel") !== index;
+        });
+      });
+    });
   }
 
   // Experiments (optional — only shown if detail.experiments is populated)

@@ -548,36 +548,44 @@ main {
 
 /* Samples */
 .samples-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  max-width: 64rem;
+  max-width: 48rem;
 }
 
-.sample-block {
-  margin: 0;
-  min-width: 0;
-}
-
-.sample-caption {
+.sample-tabs {
   display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: baseline;
-  margin: 0 0 0.35rem;
+  gap: 0;
+  border-bottom: 1px solid var(--ink);
+  margin-bottom: 0;
+}
+
+.sample-tab {
+  appearance: none;
+  border: 1px solid var(--grid);
+  border-bottom: 0;
+  background: transparent;
+  color: var(--muted);
   font-family: var(--serif-display);
   font-size: var(--size-caption);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--muted);
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+  margin: 0 0 -1px;
 }
 
-.sample-caption a {
-  color: var(--accent);
-  text-decoration: none;
-  border-bottom: 1px solid currentColor;
-  padding-bottom: 0.08em;
-  white-space: nowrap;
+.sample-tab.is-active {
+  background: var(--grid);
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.sample-tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.sample-panels {
+  min-width: 0;
 }
 
 .sample-code {
@@ -593,9 +601,27 @@ main {
   white-space: pre;
 }
 
-@media (max-width: 56rem) {
-  .samples-list {
-    grid-template-columns: minmax(0, 1fr);
+.tok-keyword {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.tok-string {
+  color: #5D4E25;
+}
+
+.tok-comment {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.tok-fn {
+  color: #2F5A61;
+}
+
+@media (max-width: 40rem) {
+  .sample-tabs {
+    overflow-x: auto;
   }
 }
 
