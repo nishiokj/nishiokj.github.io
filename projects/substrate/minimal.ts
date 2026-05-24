@@ -1,14 +1,17 @@
-import { Executioner } from "@executioner/sdk";
+import { Environment } from "@executioner/sdk";
 
-const env = await Executioner.create({
-  workspace: "new",
-  allowCommands: ["ls"],
-});
+const prompt = "Create notes.txt with a short hello, then read it back.";
+const env = await Environment.create({ host: "local", workspace: "new" });
+const defaultTools = env.toolSchemas();
+const agent = yourLlmClient(); // Replace with your LLM client initialization.
 
-try {
-  await env.write("notes.txt", "hello");
-  console.log(await env.read("notes.txt"));
-  console.log(await env.bash("ls /workspace"));
-} finally {
+async function main() {
+  const response = await agent.generate(prompt, { tools: defaultTools });
+
+  for (const toolCall of response.toolCalls()) {
+    const toolResult = await env.execute(toolCall);
+    agent.messages.push(toolResult);
+  }
+
   await env.close();
 }

@@ -45,29 +45,42 @@ window.SITE = {
             label: "Python minimal SDK loop",
             language: "py",
             href: "projects/substrate/minimal.py",
-            code: `from substrate import Executioner
+            code: `from substrate import Environment
 
-with Executioner.create(workspace="new", allow_commands=["ls"]) as env:
-    env.write("notes.txt", "hello")
-    print(env.read("notes.txt"))
-    print(env.bash("ls /workspace"))`,
+prompt = "Create notes.txt with a short hello, then read it back."
+env = Environment.create(host="local", workspace="new")
+default_tools = env.tool_schemas()
+agent = your_llm_client()  # Replace with your LLM client initialization.
+
+
+def main():
+    response = agent.generate(prompt, tools=default_tools)
+
+    for tool_call in response.tool_calls():
+        tool_result = env.execute(tool_call)
+        agent.messages.append(tool_result)
+
+    env.close()`,
           },
           {
             label: "TypeScript minimal SDK loop",
             language: "ts",
             href: "projects/substrate/minimal.ts",
-            code: `import { Executioner } from "@executioner/sdk";
+            code: `import { Environment } from "@executioner/sdk";
 
-const env = await Executioner.create({
-  workspace: "new",
-  allowCommands: ["ls"],
-});
+const prompt = "Create notes.txt with a short hello, then read it back.";
+const env = await Environment.create({ host: "local", workspace: "new" });
+const defaultTools = env.toolSchemas();
+const agent = yourLlmClient(); // Replace with your LLM client initialization.
 
-try {
-  await env.write("notes.txt", "hello");
-  console.log(await env.read("notes.txt"));
-  console.log(await env.bash("ls /workspace"));
-} finally {
+async function main() {
+  const response = await agent.generate(prompt, { tools: defaultTools });
+
+  for (const toolCall of response.toolCalls()) {
+    const toolResult = await env.execute(toolCall);
+    agent.messages.push(toolResult);
+  }
+
   await env.close();
 }`,
           },
