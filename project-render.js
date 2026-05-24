@@ -123,6 +123,22 @@
     }).join("")}</div>`;
   }
 
+  // Code samples (optional)
+  if (d.samples && d.samples.length > 0) {
+    document.querySelector("[data-samples-rule]").hidden = false;
+    document.querySelector("[data-samples-section]").hidden = false;
+    document.querySelector("[data-samples]").innerHTML = d.samples
+      .map((sample) => `
+        <figure class="sample-block">
+          <figcaption class="sample-caption">
+            <span>${esc(sample.label)}</span>
+            ${sample.href ? `<a href="${esc(sample.href)}" target="_blank" rel="noopener">Open file</a>` : ""}
+          </figcaption>
+          <pre class="sample-code"><code>${esc(sample.code)}</code></pre>
+        </figure>`)
+      .join("");
+  }
+
   // Experiments (optional — only shown if detail.experiments is populated)
   if (d.experiments && d.experiments.length > 0) {
     document.querySelector("[data-experiments-rule]").hidden = false;

@@ -546,6 +546,59 @@ main {
   }
 }
 
+/* Samples */
+.samples-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 64rem;
+}
+
+.sample-block {
+  margin: 0;
+  min-width: 0;
+}
+
+.sample-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+  margin: 0 0 0.35rem;
+  font-family: var(--serif-display);
+  font-size: var(--size-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.sample-caption a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.08em;
+  white-space: nowrap;
+}
+
+.sample-code {
+  margin: 0;
+  padding: 0.7rem 0.85rem;
+  background: var(--grid);
+  border: 1px solid var(--ink);
+  font-family: "SF Mono", "Menlo", "Fira Code", monospace;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--ink);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+@media (max-width: 56rem) {
+  .samples-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* YAML config sample (What it is) */
 .arch-yaml {
   margin: 0;

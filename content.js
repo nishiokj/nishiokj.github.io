@@ -40,6 +40,38 @@ window.SITE = {
           },
         },
         decisions: [],
+        samples: [
+          {
+            label: "Python minimal SDK loop",
+            language: "py",
+            href: "projects/substrate/minimal.py",
+            code: `from substrate import Executioner
+
+with Executioner.create(workspace="new", allow_commands=["ls"]) as env:
+    env.write("notes.txt", "hello")
+    print(env.read("notes.txt"))
+    print(env.bash("ls /workspace"))`,
+          },
+          {
+            label: "TypeScript minimal SDK loop",
+            language: "ts",
+            href: "projects/substrate/minimal.ts",
+            code: `import { Executioner } from "@executioner/sdk";
+
+const env = await Executioner.create({
+  workspace: "new",
+  allowCommands: ["ls"],
+});
+
+try {
+  await env.write("notes.txt", "hello");
+  console.log(await env.read("notes.txt"));
+  console.log(await env.bash("ls /workspace"));
+} finally {
+  await env.close();
+}`,
+          },
+        ],
         artifacts: [],
       },
     },
