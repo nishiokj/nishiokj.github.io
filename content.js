@@ -36,8 +36,7 @@ window.SITE = {
       datetime: "2026-05",
       detail: {
         why: [
-          `This project is primarily about not having to redefine tools in a new language per project, while allowing clean separation from control flow + environment state — and especially environment lifecycle vs. app control lifecycle. This allowed me to spin up and iterate on my LangGraph projects quickly, scaling state routing complexity up or down independently, without worrying about tracking large artifacts and serializations in memory or piping them through the nodes each time. On top of that, the workspace is not tied to the app runtime.`,
-          `I read studies showing certain agents do better with certain tool schemas, but often these tools map to the same underlying concept in terms of POSIX — file operations, for example. I built a layer that resolves that for some of the common agents: Claude, GPT, Kimi, and Gemini. The tool resolution layer lets you first-class extract the tool schemas for those four models.`,
+          `This project is primarily about separating tool execution from an agent application. This buys three things I find important: First, you do not have to redefine and reimplement tools for every language or project. Second, you can separate control state from environment state. Third, you can separate the environment lifecycle from the application lifecycle. Take a LangGraph pipeline, for example. A PipelineState object gets passed from stage to stage, carrying the data needed to route through the graph. That is a clean way to model control state, especially when different agents have different roles and should be used under different conditions. The issue shows up when the agents' work becomes more complex. If an agent produces 8,000 tokens of JSON that is really supposed to represent three files, should that be serialized into PipelineState and passed to the next node? My answer is no: the environment state, or a filesystem in this case, is different from the pipeline's control state. PipelineState does not need to hold the entire filesystem; it can simply hold the data required to route through the graph. This separation becomes more obvious in use cases where a pipeline is running against an environment that already exists, or against resources whose lifecycle should not be owned by the application. The filesystem, credentials, sandboxes, sidecars, and other resources may need to be created, reused, persisted, or torn down independently of any one graph run. Those resources should live in a separate environment, with its own lifecycle. This allows the pipeline to scale independently without needing to worry much about the actual underlying resources.`,
         ],
         what: {
           label: "Design",
@@ -55,6 +54,7 @@ window.SITE = {
             body:    `I kept permissions resource- and session-scoped close to the actual execution layer, and restricted the tool set in v1 before forming a hard opinion on the sandboxing/isolation concerns that arise with more sophisticated tools.`,
           },
         ],
+        samplesLabel: "Code snippets",
         samples: [
           {
             label: "Python minimal SDK loop",
@@ -128,7 +128,7 @@ async function main() {
           },
           {
             heading: "Adversarial as a primitive",
-            body:    `Adversary is powerful because the critic is unbiased toward the larger "goal state" — its goal state is rigorously evaluating for quality, signs of overfitting and reward hacking, and providing qualitative measures of what besides the KPIs this run created are true.`,
+            body:    `Adversarial revision is powerful because the critic is unbiased toward the larger "goal state" — its goal state is rigorously evaluating for quality, signs of overfitting and reward hacking, and qualitative signals beyond the KPIs this run created.`,
           },
         ],
         demo: [
@@ -168,13 +168,13 @@ async function main() {
               },
               {
                 lead: "Evals",
-                text: `A similar issue surfaces as benchmarks, only these will need to be more custom to individual agent deployments, and thus we may need an order of magnitude more. This is part of why process-shaped implementation projects will take off first. You can plug and play an agent in your claims process against historical cases and quickly gauge how it will perform.`,
+                text: `A similar issue surfaces with benchmarks, only these will need to be more custom to individual agent deployments, and thus we may need an order of magnitude more. This is part of why process-shaped implementation projects will take off first. You can plug and play an agent in your claims process against historical cases and quickly gauge how it will perform.`,
               },
             ],
           },
           `I believe that we will continue to want to answer "What do I make of this huge pile of code? Which model performs best for my use case in production?" and this becomes disproportionately harder as we scale what we're examining. Although, I do think this is not universally true. As agents become increasingly competent at long-horizon decision-making, forecasting, and acting rationally, the less we should be asking "Is this patch good?" and the more we should be observing "Which agent is making the most money in our simulated marketplace?" or "How accurately does the agent predict the Mayor of Topeka in 1908 using newspaper clippings from the year leading up to the election, fed in incrementally so it can update a rolling prediction?" This of course leads to a different class of problems, but even these are experiments.`,
           `The connection between evals, unit tests, and benchmarks is that scaling any of them requires either hard verification, human review, or agent review — and we often don't have a clean or explicit "oracle." Validating high-dimensional mountains of output becomes impossible to hard-verify at scale; human review is helpful but becomes a huge bottleneck; and agent-as-judge presents an entire new suite of problems — reward hacking, overfitting to specs/rubrics, and false positives that are extremely difficult to detect.`,
-          `I think process-shaped systems in enterprises are quite ripe, because existing systems already provide evals, KPIs, and a lot of the hardest epistemic infrastructure. By providing a solid bar to measure against, this contextualizes results, especially if you can re-use actual production inputs. I think it is very important to leverage this. Any mechanism that reveals trusted information about a body of work an agent performed is increasingly valuable. This is why things like Karpathy's autoresearch work so well: the agent gets feedback from its actions that is relatively unfalsifiable.`,
+          `I think process-shaped systems in enterprises are quite ripe, because existing systems already provide evals, KPIs, and a lot of the hardest epistemic infrastructure. By providing a solid bar to measure against, this contextualizes results, especially if you can reuse actual production inputs. I think it is very important to leverage this. Any mechanism that reveals trusted information about a body of work an agent performed is increasingly valuable. This is why things like Karpathy's autoresearch work so well: the agent gets feedback from its actions that is relatively unfalsifiable.`,
         ],
         what: {
           label: "",
@@ -212,7 +212,7 @@ async function main() {
           },
           {
             heading: "Pause / resume / recover, with tiered pre-flight",
-            body:    `One of the key aspects of the runner is that experiments can be paused, resumed, and recovered, because they need to run for long periods of time. I set up a sophisticated tiering of smoke tests and linting into the harness, so that by the time you launch a full run you have large confidence in at least mechanical viability.`,
+            body:    `One of the key aspects of the runner is that experiments can be paused, resumed, and recovered, because they need to run for long periods of time. I set up a sophisticated tiering of smoke tests and linting into the harness, so that by the time you launch a full run you have high confidence in at least mechanical viability.`,
           },
           {
             heading: "Closed-loop regression / observability / curation",
@@ -234,8 +234,8 @@ async function main() {
       datetime: "2025-10",
       detail: {
         why: [
-          `You could be reading this and wondering "what does this do that Claude Code, Codex, OpenClaw, etc. doesn't?". The answer is nothing. Or nothing really of note. I started this project all the way back in Fall 2025, pre-OpenClaw and when Codex was mud and sticks.`,
-          `Nova started as a voice agent on a Raspberry Pi. Which I moved away from after I ported it from Python to TypeScript and did not want to mess with a new VAD/beamforming package.`,
+          `You could be reading this and wondering, "What does this do that Claude Code, Codex, OpenClaw, etc. doesn't?" The answer is nothing. Or nothing really of note. I started this project all the way back in fall 2025, pre-OpenClaw and when Codex was mud and sticks.`,
+          `Nova started as a voice agent on a Raspberry Pi, which I moved away from after I ported it from Python to TypeScript and did not want to mess with a new VAD/beamforming package.`,
           `I made a lot of mistakes and learned a lot of lessons.`,
           {
             list: "ul",

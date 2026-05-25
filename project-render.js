@@ -166,6 +166,7 @@
   if (d.samples && d.samples.length > 0) {
     document.querySelector("[data-samples-rule]").hidden = false;
     document.querySelector("[data-samples-section]").hidden = false;
+    document.querySelector("[data-samples-label]").textContent = d.samplesLabel || "Samples";
     const defaultIndex = Math.max(0, d.samples.findIndex((sample) => sample.language === "py"));
     const sampleTabs = d.samples.map((sample, index) => `
       <button class="sample-tab${index === defaultIndex ? " is-active" : ""}" type="button" data-sample-tab="${index}">
