@@ -115,16 +115,16 @@ async function main() {
       detail: {
         decisions: [
           {
-            heading: "SOTA harnesses collapsed into the minimal hard-verifiable shape",
+            heading: "SOTA harnesses collapsed into the minimal hard-verifiable form",
             body:    `Even with aggressive prompting and unlimited tool looping, existing harnesses reward-hacked the benchmark spec itself — producing small, syntactically obscure fixes that were technically hard to verify but trivially simple as engineering problems. This is specification gaming: the model found the cheapest path to satisfying the stated objective without satisfying the intent.`,
           },
           {
             heading: "Adversarial revision as selection pressure toward genuine complexity",
-            body:    `The adversarial critic has no incentive to accept the minimal shape. It flags shallow fixes, surfaces obvious solutions, and pushes the generator toward genuine complexity. The judge arbitrates. Between the three you get selection pressure toward cases that are actually hard — not just hard to verify. A hunch, validated experimentally.`,
+            body:    `The adversarial critic has no incentive to accept the minimal shape. It flags shallow fixes, surfaces obvious solutions, and pushes the generator toward genuine complexity. The judge arbitrates. Among the three, you get selection pressure toward cases that are actually hard — not just hard to verify. A hunch, validated experimentally.`,
           },
           {
             heading: "Empirical validation across model combinations",
-            body:    `Ran a series of epistemic experiments varying generators, adversaries, and judges across different model combinations. The adversarial revision + LLM-as-Judge pattern consistently produced higher rates of quality gate acceptance compared to direct generation. The results held across combinations, suggesting the mechanism is robust rather than model-specific.`,
+            body:    `Ran a series of epistemic experiments varying generators, adversaries, and judges across different model combinations. The adversarial revision + LLM-as-Judge pattern consistently produced higher rates of quality gate acceptance than direct generation. The results held across combinations, suggesting the mechanism is robust rather than model-specific.`,
           },
           {
             heading: "Adversarial as a primitive",
@@ -152,7 +152,7 @@ async function main() {
       detail: {
         why: [
           {
-            html: `Per <a href="https://metr.org/" target="_blank" rel="noopener">METR</a>'s <em>Task-Completion Time Horizons of Frontier Models</em>, a single agent run can stretch anywhere from four to sixteen hours. The question we're left to answer: how do we validate millions of tokens, the giant diffs, the features being built without us in the loop? How do we measure how agent systems are performing while we're still developing them? This is an epistemic problem. I find it interesting and widely applicable:`,
+            html: `Per <a href="https://metr.org/" target="_blank" rel="noopener">METR</a>'s <em>Task-Completion Time Horizons of Frontier Models</em>, a single agent run can stretch anywhere from four to sixteen hours. The question we're left to answer: how do we validate millions of tokens, giant diffs, and features being built without us in the loop? How do we measure how agent systems are performing while we're still developing them? This is an epistemic problem. I find it interesting and widely applicable:`,
           },
           {
             list: "ul",
@@ -172,7 +172,7 @@ async function main() {
               },
             ],
           },
-          `I believe that we will continue to want to answer "What do I make of this huge pile of code? Which model performs best for my use case in production?" and this becomes disproportionately harder as we scale what we're examining. Although, I do think this is not universally true. As agents become increasingly competent at long-horizon decision-making, forecasting, and acting rationally, the less we should be asking "Is this patch good?" and the more we should be observing "Which agent is making the most money in our simulated marketplace?" or "How accurately does the agent predict the Mayor of Topeka in 1908 using newspaper clippings from the year leading up to the election, fed in incrementally so it can update a rolling prediction?" This of course leads to a different class of problems, but even these are experiments.`,
+          `I believe that we will continue to want to answer "What do I make of this huge pile of code? Which model performs best for my use case in production?" and this becomes disproportionately harder as we scale what we're examining. I do think this is not universally true. As agents become increasingly competent at long-horizon decision-making, forecasting, and acting rationally, we should ask less, "Is this patch good?" and observe more, "Which agent is making the most money in our simulated marketplace?" or "How accurately does the agent predict the Mayor of Topeka in 1908 using newspaper clippings from the year leading up to the election, fed in incrementally so it can update a rolling prediction?" This, of course, leads to a different class of problems, but even these are experiments.`,
           `The connection between evals, unit tests, and benchmarks is that scaling any of them requires either hard verification, human review, or agent review — and we often don't have a clean or explicit "oracle." Validating high-dimensional mountains of output becomes impossible to hard-verify at scale; human review is helpful but becomes a huge bottleneck; and agent-as-judge presents an entire new suite of problems — reward hacking, overfitting to specs/rubrics, and false positives that are extremely difficult to detect.`,
           `I think process-shaped systems in enterprises are quite ripe, because existing systems already provide evals, KPIs, and a lot of the hardest epistemic infrastructure. By providing a solid bar to measure against, this contextualizes results, especially if you can reuse actual production inputs. I think it is very important to leverage this. Any mechanism that reveals trusted information about a body of work an agent performed is increasingly valuable. This is why things like Karpathy's autoresearch work so well: the agent gets feedback from its actions that is relatively unfalsifiable.`,
         ],
@@ -242,11 +242,11 @@ async function main() {
             items: [
               {
                 lead: "Plan, Execute, Reflect as built-in program scaffolding",
-                text: `This was restrictive, slow, and carried way too much task state in program memory. I had an epiphany which was "Let them cook". The harness should not be opinionated about 'how' the agent works. You provide the boundaries, or the 'what' it can do.`,
+                text: `This was restrictive, slow, and carried way too much task state in program memory. I had an epiphany: "Let them cook." The harness should not be opinionated about 'how' the agent works. You provide the boundaries, or the 'what' it can do.`,
               },
               {
                 lead: "Testing with a slow model to save money",
-                text: `Shoutout to Z.ai. The GLM series is great, but they are SLOW. You will be tempted to use a subscription to a Chinese open-source lab when wasting tokens iterating early on. I would advise against it. This mistake was made worse by the API not supporting structured outputs, and the tool-calling accuracy I would call a 'mixed bag' if I were trying to be charitable. If I were trying to be negative, I would call it a 'mixed bag' because a blind man reaching into a mixed bag of my tool definitions would've pulled the right one out just as often. And he might even have remembered to fence his JSON.`,
+                text: `Shoutout to Z.ai. The GLM series is great, but they are SLOW. You will be tempted to use a subscription to a Chinese open-source lab when wasting tokens iterating early on. I would advise against it. This mistake was made worse by the API not supporting structured outputs, and the tool-calling accuracy I would call a 'mixed bag' if I were trying to be charitable. If I were trying to be negative, I would call it a 'mixed bag' because a blind man reaching into a mixed bag of my tool definitions would have pulled the right one out just as often. And he might even have remembered to fence his JSON.`,
               },
               {
                 lead: "Observability",
