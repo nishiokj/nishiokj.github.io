@@ -1,4 +1,4 @@
-import { Environment } from "@executioner/sdk";
+import { Environment } from "@substrate/sdk";
 
 const prompt = "Create notes.txt with a short hello, then read it back.";
 const env = await Environment.create({ host: "local", workspace: "new" });

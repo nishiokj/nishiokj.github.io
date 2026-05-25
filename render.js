@@ -15,7 +15,10 @@
 
   // Masthead
   document.querySelector("[data-name]").textContent = s.name;
-  document.querySelector("[data-bio]").textContent = s.bio;
+  const bioParas = Array.isArray(s.bio) ? s.bio : [s.bio];
+  document.querySelector("[data-bio]").innerHTML = bioParas
+    .map((p) => `<p>${esc(p)}</p>`)
+    .join("");
   document.title = s.name;
 
   document.querySelector("[data-links]").innerHTML = s.links
@@ -25,6 +28,13 @@
       return `<li><a href="${esc(l.href)}"${attrs}>${esc(l.label)}</a></li>`;
     })
     .join("");
+
+  // Projects intro (optional)
+  const introEl = document.querySelector("[data-projects-intro]");
+  if (introEl && s.projectsIntro && s.projectsIntro.length > 0) {
+    introEl.innerHTML = s.projectsIntro.map((p) => `<p>${esc(p)}</p>`).join("");
+    introEl.hidden = false;
+  }
 
   // Projects
   document.querySelector("[data-projects]").innerHTML = s.projects
@@ -39,12 +49,10 @@
       const title = detailHref
         ? `<a href="${detailHref}"${linkAttrs}>${esc(p.title)}</a>`
         : esc(p.title);
-      const num = String(i + 1).padStart(2, "0");
       return `
       <div class="project">
-        <span class="project-num">${num}</span>
         <dt class="project-title">
-          <h2>${title}</h2>
+          <h2>${title}${p.tag ? `<span class="project-tag">${esc(p.tag)}</span>` : ""}</h2>
         </dt>
         <time class="project-date" datetime="${esc(p.datetime)}">${esc(nb(p.date))}</time>
         <dd class="project-body">${esc(p.body)}${p.slug ? ` <a href="project.html?slug=${esc(p.slug)}" class="read-more">Read more →</a>` : ""}</dd>

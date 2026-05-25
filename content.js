@@ -11,7 +11,13 @@
 window.SITE = {
   name: "Jevin Nishioka",
 
-  bio: "This is a porfolio of what I have been working on recently. Feel free to reach out to me with any questions or inquiries.",
+  bio: [
+    `I'm an engineer who builds production systems for clients. At two Fortune 50 companies I have owned user services, CDC pipelines, and connective middleware handling hundreds of millions of PII requests a month.`,
+  ],
+
+  projectsIntro: [
+    `Independently, I have been focusing on what I believe is the most pressing question for deploying AI systems today: how do we verify enormous amounts of agent-driven content? The projects below are where I am working on answers.`,
+  ],
 
   links: [
     { label: "GitHub",   href: "https://github.com/nishiokj" },
@@ -23,12 +29,16 @@ window.SITE = {
   projects: [
     {
       title:    "Substrate",
+      tag:      "Tool Execution Environments",
       slug:     "substrate",
       body:     "Rust-based tool execution substrate that separates an agent's control layer from execution, so tool implementations don't have to be rebuilt per language and product.",
       date:     "May 2026",
       datetime: "2026-05",
       detail: {
-        // Add why / what / decisions / demo / artifacts. See the Bucephalus entry for the full shape.
+        why: [
+          `This project is primarily about not having to redefine tools in a new language per project, while allowing clean separation from control flow + environment state — and especially environment lifecycle vs. app control lifecycle. This allowed me to spin up and iterate on my LangGraph projects quickly, scaling state routing complexity up or down independently, without worrying about tracking large artifacts and serializations in memory or piping them through the nodes each time. On top of that, the workspace is not tied to the app runtime.`,
+          `I read studies showing certain agents do better with certain tool schemas, but often these tools map to the same underlying concept in terms of POSIX — file operations, for example. I built a layer that resolves that for some of the common agents: Claude, GPT, Kimi, and Gemini. The tool resolution layer lets you first-class extract the tool schemas for those four models.`,
+        ],
         what: {
           label: "Design",
           intro: [
@@ -39,7 +49,12 @@ window.SITE = {
             caption: "A tool call's path — the agent app calls in through a language SDK, gets routed directly or through the broker to a worker, and the Substrate server runs it against a resolved policy and workspace, persisting sessions, a sandbox, an effect ledger, and artifacts.",
           },
         },
-        decisions: [],
+        decisions: [
+          {
+            heading: "Permissions scoped close to execution",
+            body:    `I kept permissions resource- and session-scoped close to the actual execution layer, and restricted the tool set in v1 before forming a hard opinion on the sandboxing/isolation concerns that arise with more sophisticated tools.`,
+          },
+        ],
         samples: [
           {
             label: "Python minimal SDK loop",
@@ -66,7 +81,7 @@ def main():
             label: "TypeScript minimal SDK loop",
             language: "ts",
             href: "projects/substrate/minimal.ts",
-            code: `import { Environment } from "@executioner/sdk";
+            code: `import { Environment } from "@substrate/sdk";
 
 const prompt = "Create notes.txt with a short hello, then read it back.";
 const env = await Environment.create({ host: "local", workspace: "new" });
@@ -85,11 +100,14 @@ async function main() {
 }`,
           },
         ],
-        artifacts: [],
+        artifacts: [
+          { label: "Source on GitHub", href: "https://github.com/nishiokj/Substrate" },
+        ],
       },
     },
     {
       title:    "Genie",
+      tag:      "Synthetic data",
       slug:     "genie",
       body:     "Opinionated data generation workflow based on the adversarial revision + LLM-as-Judge pattern, which aids in reducing common quality issues in synthetic data.",
       date:     "Apr 2026",
@@ -108,6 +126,10 @@ async function main() {
             heading: "Empirical validation across model combinations",
             body:    `Ran a series of epistemic experiments varying generators, adversaries, and judges across different model combinations. The adversarial revision + LLM-as-Judge pattern consistently produced higher rates of quality gate acceptance compared to direct generation. The results held across combinations, suggesting the mechanism is robust rather than model-specific.`,
           },
+          {
+            heading: "Adversarial as a primitive",
+            body:    `Adversary is powerful because the critic is unbiased toward the larger "goal state" — its goal state is rigorously evaluating for quality, signs of overfitting and reward hacking, and providing qualitative measures of what besides the KPIs this run created are true.`,
+          },
         ],
         demo: [
           {
@@ -116,19 +138,22 @@ async function main() {
           },
         ],
         artifacts: [
-          { label: "Source on GitHub", href: "https://github.com/nishiokj/synthetic-data-generator" },
+          { label: "Source on GitHub", href: "https://github.com/nishiokj/Genie" },
         ],
       },
     },
     {
       title:    "Bucephalus",
+      tag:      "Agent Experimentation",
       slug:     "bucephalus",
       body:     "Rust-based experiment harness designed around the idea that experiments will need to be long-lived, agent-driven, and support a variety of shapes.",
       date:     "Dec 2025",
       datetime: "2025-12",
       detail: {
         why: [
-          `Feedback loops. Agents generate mountains of content. How do we 'verify' any of this? This is an epistemic problem. I find it interesting and widely applicable:`,
+          {
+            html: `Per <a href="https://metr.org/" target="_blank" rel="noopener">METR</a>'s <em>Task-Completion Time Horizons of Frontier Models</em>, a single agent run can stretch anywhere from four to sixteen hours. The question we're left to answer: how do we validate millions of tokens, the giant diffs, the features being built without us in the loop? How do we measure how agent systems are performing while we're still developing them? This is an epistemic problem. I find it interesting and widely applicable:`,
+          },
           {
             list: "ul",
             items: [
@@ -139,6 +164,7 @@ async function main() {
               {
                 lead: "Unit Testing",
                 text: `An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2. Not to mention, we need to assume the guy who built the B-2 did so by following a markdown file written by a second guy describing how he thinks a B-2 should look. Each step is characterized by a lossy materialization of intent from the previous step and a lack of a hard feedback loop.`,
+                pullQuote: `An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2.`,
               },
               {
                 lead: "Evals",
@@ -147,12 +173,15 @@ async function main() {
             ],
           },
           `I believe that we will continue to want to answer "What do I make of this huge pile of code? Which model performs best for my use case in production?" and this becomes disproportionately harder as we scale what we're examining. Although, I do think this is not universally true. As agents become increasingly competent at long-horizon decision-making, forecasting, and acting rationally, the less we should be asking "Is this patch good?" and the more we should be observing "Which agent is making the most money in our simulated marketplace?" or "How accurately does the agent predict the Mayor of Topeka in 1908 using newspaper clippings from the year leading up to the election, fed in incrementally so it can update a rolling prediction?" This of course leads to a different class of problems, but even these are experiments.`,
+          `The connection between evals, unit tests, and benchmarks is that scaling any of them requires either hard verification, human review, or agent review — and we often don't have a clean or explicit "oracle." Validating high-dimensional mountains of output becomes impossible to hard-verify at scale; human review is helpful but becomes a huge bottleneck; and agent-as-judge presents an entire new suite of problems — reward hacking, overfitting to specs/rubrics, and false positives that are extremely difficult to detect.`,
+          `I think process-shaped systems in enterprises are quite ripe, because existing systems already provide evals, KPIs, and a lot of the hardest epistemic infrastructure. By providing a solid bar to measure against, this contextualizes results, especially if you can re-use actual production inputs. I think it is very important to leverage this. Any mechanism that reveals trusted information about a body of work an agent performed is increasingly valuable. This is why things like Karpathy's autoresearch work so well: the agent gets feedback from its actions that is relatively unfalsifiable.`,
         ],
         what: {
-          label: "Design",
-          // Add a couple of sentences here as paragraph strings, e.g.:
-          //   "Bucephalus runs experiments declared in YAML across parallel trials.",
+          label: "",
           intro: [
+            {
+              html: `Here is an example of a single-trial invocation of an experiment that includes the benchmark's grading script in the trial container and runs the trial on <a href="https://modal.com/products/sandboxes" target="_blank" rel="noopener">Modal sandboxes</a>.`,
+            },
           ],
           diagram: {
             src: "projects/bucephalus/single-trial.svg",
@@ -177,15 +206,28 @@ async function main() {
             heading: "Transactional trial results",
             body:    `Recovery happens at the experiment level, not the trial. If the runner is shut down, in-progress trials are not resumed — their partial work is rolled back. Reverting a trial's mid-flight state is hard, and even if you manage it, you'll likely hit a cache miss that confounds the result anyway. A clean slate is simpler and more trustworthy.`,
           },
+          {
+            heading: "Experiments on synthetic data primitives",
+            body:    `I used the harness to run experiments on different compositions of synthetic data pipelines, to understand the effects of primitives like adversarial review, quality gating, and environment seeding with globally stateful checks for seed diversity. This was fairly naive — over a massive set of data, I wouldn't necessarily believe RAG/seed-taxonomy de-duping would guarantee tail coverage — but for generating a few dozen examples it seemed to help quite a bit. I also tested LLM-as-a-Judge across different models and providers, including counterfactual experiments measuring the judge's propensity for false positives — things like same-provider correlation, where the judge comes from the same lab as the generator.`,
+          },
+          {
+            heading: "Pause / resume / recover, with tiered pre-flight",
+            body:    `One of the key aspects of the runner is that experiments can be paused, resumed, and recovered, because they need to run for long periods of time. I set up a sophisticated tiering of smoke tests and linting into the harness, so that by the time you launch a full run you have large confidence in at least mechanical viability.`,
+          },
+          {
+            heading: "Closed-loop regression / observability / curation",
+            body:    `Agent systems that aren't fixed to a static model or harness need a closed-loop regression, observability+trace, and curation pipeline, because frequent updates should be evaluated. But these are expensive and slow, so it's crucial to be surgical — a bunch of redundant ones are pure cost, and would likely signal other underexamined behaviors.`,
+          },
         ],
         demo: null,
         artifacts: [
-          { label: "Source on GitHub", href: "https://github.com/nishiokj/AgentLab" },
+          { label: "Source on GitHub", href: "https://github.com/nishiokj/Bucephalus" },
         ],
       },
     },
     {
       title:    "Nova",
+      tag:      "Agent harness",
       slug:     "nova",
       body:     "Model-agnostic harness for orchestrating filesystem agents and subagents.",
       date:     "Oct 2025",
@@ -213,7 +255,12 @@ async function main() {
             ],
           },
         ],
-        decisions: [],
+        decisions: [
+          {
+            heading: "Parent-dispatched subagents over parallel agents",
+            body:    `With parallel agents, I often found that the juice wasn't worth the squeeze. It quickly becomes a coordination problem where each agent's context window represents a very difficult sync problem. Subagents dispatched in parallel by a parent were stronger: intent scoped via a central planner provides much better up-front coordination. Intent originating from a single brain sacrifices maximum parallelism but makes execution much more salient.`,
+          },
+        ],
         demo: [
           {
             type: "image",

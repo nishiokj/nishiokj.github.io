@@ -46,6 +46,9 @@
       if (typeof block === "string") {
         return `<p class="prose-p">${esc(block)}</p>`;
       }
+      if (block.html) {
+        return `<p class="prose-p">${block.html}</p>`;
+      }
       const tag = block.list === "ol" ? "ol" : "ul";
       const sectioned = block.items.some((item) => typeof item !== "string" && item.lead);
       const items = block.items.map((item) => {
@@ -56,7 +59,10 @@
           ? `<h3 class="prose-subhead">${esc(item.lead.replace(/\.$/, ""))}</h3>`
           : "";
         const body = item.text || "";
-        return `<li class="prose-section-item">${heading}${body ? `<p class="prose-subcopy">${esc(body)}</p>` : ""}</li>`;
+        const pull = item.pullQuote
+          ? `<blockquote class="pull-quote">${esc(item.pullQuote)}</blockquote>`
+          : "";
+        return `<li class="prose-section-item">${heading}${body ? `<p class="prose-subcopy">${esc(body)}</p>` : ""}${pull}</li>`;
       }).join("");
       const sectionClass = sectioned ? " prose-list--sectioned" : "";
       return `<${tag} class="prose-list prose-list--${tag}${sectionClass}">${items}</${tag}>`;
@@ -94,7 +100,12 @@
   if (d.what && (d.what.intro?.length > 0 || d.what.yaml || d.what.diagram)) {
     document.querySelector("[data-what-rule]").hidden = false;
     document.querySelector("[data-what-section]").hidden = false;
-    document.querySelector("[data-what-label]").textContent = d.what.label || "What it is";
+    const whatLabel = document.querySelector("[data-what-label]");
+    if (d.what.label === "" || d.what.label === false) {
+      whatLabel.hidden = true;
+    } else {
+      whatLabel.textContent = d.what.label || "What it is";
+    }
     let whatHtml = "";
     if (d.what.intro?.length > 0) {
       whatHtml += renderProseBlocks(d.what.intro);
@@ -143,8 +154,7 @@
     document.querySelector("[data-demo-label]").textContent = d.demoLabel || "Demo";
     const demoEl = document.querySelector("[data-demo]");
     const demoItems = Array.isArray(d.demo) ? d.demo : [d.demo];
-    const demoGridClass = demoItems.length > 1 ? "demo-grid demo-grid--multi" : "demo-grid";
-    demoEl.innerHTML = `<div class="${demoGridClass}">${demoItems.map((demo) => {
+    demoEl.innerHTML = `<div class="demo-grid">${demoItems.map((demo) => {
       const media = demo.type === "video"
         ? `<video src="${esc(demo.src)}" controls class="demo-media"></video>`
         : `<img src="${esc(demo.src)}" alt="${esc(demo.alt || "Demo")}" class="demo-media" />`;

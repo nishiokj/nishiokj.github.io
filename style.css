@@ -92,6 +92,14 @@ main {
   line-height: 1.5;
 }
 
+.bio p {
+  margin: 0 0 0.75rem;
+}
+
+.bio p:last-child {
+  margin-bottom: 0;
+}
+
 .masthead-links {
   margin: 0;
   padding: 0;
@@ -131,9 +139,23 @@ main {
 }
 
 /* ---------------------------------------------------------------------------
-   Projects — numbered, stacked cards. A hanging numeral sits in the left
-   gutter; title + date share the top row, body sits below.
+   Projects — stacked cards. Title + date share the top row, body sits below.
 --------------------------------------------------------------------------- */
+.projects-intro {
+  max-width: 38rem;
+  margin: 0 0 1.5rem;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.projects-intro p {
+  margin: 0 0 0.75rem;
+}
+
+.projects-intro p:last-child {
+  margin-bottom: 0;
+}
+
 .projects {
   margin: 0;
   padding: 0;
@@ -141,7 +163,7 @@ main {
 
 .project {
   display: grid;
-  grid-template-columns: 2.5rem 1fr 5rem;
+  grid-template-columns: 1fr 5rem;
   column-gap: 1.25rem;
   align-items: baseline;
   padding: 0.85rem 0;
@@ -151,26 +173,27 @@ main {
 .project:first-child { border-top: 0; }
 .project:last-child  { border-bottom: 1px solid var(--grid); }
 
-.project-num {
-  grid-column: 1;
-  grid-row: 1;
-  font-family: var(--serif-display);
-  font-size: 1.875rem;
-  line-height: 1;
-  color: var(--muted);
-  font-variant-numeric: lining-nums;
-  font-feature-settings: "lnum";
-}
-
 .project-title {
-  grid-column: 2;
+  grid-column: 1;
   grid-row: 1;
   margin: 0;
   min-width: 0;
 }
 
+.project-tag {
+  margin-left: 0.75rem;
+  font-family: var(--serif-display);
+  font-size: var(--size-caption);
+  font-weight: 400;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  vertical-align: 0.18em;
+  white-space: nowrap;
+}
+
 .project-date {
-  grid-column: 3;
+  grid-column: 2;
   grid-row: 1;
   font-family: var(--serif-display);
   font-size: var(--size-caption);
@@ -184,7 +207,7 @@ main {
 }
 
 .project-body {
-  grid-column: 2 / -1;
+  grid-column: 1 / -1;
   grid-row: 2;
   margin: 0.45rem 0 0;
   max-width: 48rem;
@@ -328,20 +351,20 @@ main {
   }
 
   .project {
-    grid-template-columns: 2.75rem minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     column-gap: 1rem;
     align-items: start;
   }
 
   .project-date {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 2;
     margin-top: 0.2rem;
     text-align: left;
   }
 
   .project-body {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 3;
     max-width: 100%;
   }
@@ -475,6 +498,18 @@ main {
   line-height: 1.55;
 }
 
+.pull-quote {
+  margin: 1rem 0 0;
+  padding: 0 0 0 1rem;
+  border-left: 2px solid var(--accent);
+  font-family: var(--serif-display);
+  font-style: italic;
+  font-size: 1.25rem;
+  line-height: 1.35;
+  color: var(--ink);
+  max-width: 36rem;
+}
+
 /* Decisions */
 .decisions-list {
   display: flex;
@@ -516,14 +551,10 @@ main {
 /* Demo */
 .demo-grid {
   display: grid;
-  grid-template-columns: minmax(0, 24rem);
-  gap: 1rem;
+  grid-template-columns: minmax(0, 56rem);
+  gap: 1.5rem;
   align-items: start;
   margin: 0;
-}
-
-.demo-grid--multi {
-  grid-template-columns: repeat(2, minmax(0, 24rem));
 }
 
 .demo-media {
@@ -538,12 +569,6 @@ main {
 
 .demo-tile .demo-media {
   max-width: none;
-}
-
-@media (max-width: 48rem) {
-  .demo-grid--multi {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 
 /* Samples */
