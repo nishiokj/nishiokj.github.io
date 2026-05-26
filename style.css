@@ -3,7 +3,7 @@
 --------------------------------------------------------------------------- */
 :root {
   --ink:    #1B1B1F;
-  --muted:  #807A6F;
+  --muted:  #5F5A50;
   --accent: #A6342B;
   --bg:     #F6F1E6;
   --grid:   #E3DBC9;
@@ -17,7 +17,7 @@
   --size-display: 3rem;       /* 48px */
   --size-section: 1.25rem;    /* 20px */
 
-  --max:    84rem;
+  --max:    62rem;
   --gutter: 2rem;
 }
 
@@ -342,6 +342,12 @@ main {
     row-gap: 0.25rem;
     white-space: normal;
   }
+
+  /* Drop the inter-item divider on mobile so a wrapped link
+     doesn't carry an orphan "|" onto the next row. */
+  .masthead-links li + li { border-left: 0; }
+  .masthead-links li { padding: 0 0.6rem 0 0; }
+  .masthead-links li:last-child { padding-right: 0; }
 
   .project {
     grid-template-columns: minmax(0, 1fr);
