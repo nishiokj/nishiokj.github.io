@@ -158,13 +158,13 @@ async function main() {
             list: "ul",
             items: [
               {
-                lead: "Benchmarks",
-                text: `How do you create a benchmark case that can be verified deterministically? A lot of benchmarks have answered this question by making the problem as narrow as possible, and thus easy to 'verify'. Think assigning a score to a fill-in-the-blank vs. an essay.`,
-              },
-              {
                 lead: "Unit Testing",
                 text: `An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2. Not to mention, we need to assume the guy who built the B-2 did so by following a markdown file written by a second guy describing how he thinks a B-2 should look. Each step is characterized by a lossy materialization of intent from the previous step and a lack of a hard feedback loop.`,
                 pullQuote: `An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2.`,
+              },
+              {
+                lead: "Benchmarks",
+                text: `How do you create a benchmark case that can be verified deterministically? A lot of benchmarks have answered this question by making the problem as narrow as possible, and thus easy to 'verify'. Think assigning a score to a fill-in-the-blank vs. an essay.`,
               },
               {
                 lead: "Evals",
@@ -172,8 +172,7 @@ async function main() {
               },
             ],
           },
-          `I believe that we will continue to want to answer "What do I make of this huge pile of code? Which model performs best for my use case in production?" and this becomes disproportionately harder as we scale what we're examining. I do think this is not universally true. As agents become increasingly competent at long-horizon decision-making, forecasting, and acting rationally, we should ask less, "Is this patch good?" and observe more, "Which agent is making the most money in our simulated marketplace?" or "How accurately does the agent predict the Mayor of Topeka in 1908 using newspaper clippings from the year leading up to the election, fed in incrementally so it can update a rolling prediction?" This, of course, leads to a different class of problems, but even these are experiments.`,
-          `The connection between evals, unit tests, and benchmarks is that scaling any of them requires either hard verification, human review, or agent review — and we often don't have a clean or explicit "oracle." Validating high-dimensional mountains of output becomes impossible to hard-verify at scale; human review is helpful but becomes a huge bottleneck; and agent-as-judge presents an entire new suite of problems — reward hacking, overfitting to specs/rubrics, and false positives that are extremely difficult to detect.`,
+          `I believe that we will continue to want to answer "What do I make of this huge pile of code? Which model performs best for my use case in production?" and this becomes disproportionately harder as we scale what we're examining. Although, this may not be true forever. As agents become increasingly competent at long-horizon decision-making, forecasting, and acting rationally, we should ask less, "Is this patch good?" and observe more, "Which agent is making the most money in our simulated marketplace?" or "How accurately does the agent predict the Mayor of Topeka in 1908 using newspaper clippings from the year leading up to the election?" This, of course, leads to a different class of problems, but even these are experiments.`,
           `I think process-shaped systems in enterprises are quite ripe, because existing systems already provide evals, KPIs, and a lot of the hardest epistemic infrastructure. By providing a solid bar to measure against, this contextualizes results, especially if you can reuse actual production inputs. I think it is very important to leverage this. Any mechanism that reveals trusted information about a body of work an agent performed is increasingly valuable. This is why things like Karpathy's autoresearch work so well: the agent gets feedback from its actions that is relatively unfalsifiable.`,
         ],
         what: {
