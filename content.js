@@ -200,7 +200,7 @@ async function main() {
           },
           {
             heading: "Stages, Ephemerals, Externals",
-            body:    `A trial runs against a case: a declared problem, unwrapped and materialized into a workspace. The trial runtime is the chain of stages that operate on that workspace — the agent, the grader, any others — wired by the runner, which carries each stage's output into the next as a Transport Envelope. A stage declares only its own input and output and never knows what runs before or after it. That wiring is the line between the three primitives. A Stage is a link in the chain — transport is ours. An Ephemeral runs off the chain, but the runner still owns its lifecycle: sidecars, MCP servers, memory systems, spun up for the trial and torn down with it. An External is off the chain and outside our jurisdiction entirely — network egress, credentials, third-party APIs; declaring them is what gives you hard accounting of everything that crossed the boundary. So the test is two questions: is it a link we wired? Then it's a Stage. If not, do we own its lifecycle? Ephemeral if yes, External if no. The workspace itself is none of the three — not machinery, but the subject the machinery acts on. The Transport Envelope is the uniform shape that keeps all of this declarative even as the things at the boundary diverge.`,
+            body:    `A trial runs against a case: a declared problem, unwrapped and materialized into a workspace. The trial runtime is the chain of stages that operate on that workspace — the agent, the grader, and any other stages — wired by the runner, which carries each stage's output into the next as a Transport Envelope. A stage declares only its own input and output and never knows what runs before or after it. That wiring is the line between the three primitives. A Stage is a link in the chain — transport is ours. An Ephemeral runs off the chain, but the runner still owns its lifecycle: sidecars, MCP servers, memory systems, spun up for the trial and torn down with it. An External is off the chain and outside our jurisdiction entirely — network egress, credentials, third-party APIs; declaring them is what gives you hard accounting of everything that crossed the boundary. So the test is two questions: is it a link we wired? Then it's a Stage. If not, do we own its lifecycle? Ephemeral if yes, External if no. The workspace itself is none of the three — not machinery, but the subject the machinery acts on. The Transport Envelope is the uniform shape that keeps all of this declarative even as the things at the boundary diverge.`,
           },
           {
             heading: "Transactional trial results",
@@ -271,6 +271,7 @@ async function main() {
             type: "image",
             src:  "nova-monitor.png",
             alt:  "Nova agent monitor showing an active run with execution flow, tool calls, token counts, and touched files.",
+            note: "This is the trace viewer I built. Very helpful, maybe a bit heavy but I may as well put my 64GB of RAM to work.",
           },
         ],
         demoLabel: "Screenshots",

@@ -158,7 +158,10 @@
       const media = demo.type === "video"
         ? `<video src="${esc(demo.src)}" controls class="demo-media"></video>`
         : `<img src="${esc(demo.src)}" alt="${esc(demo.alt || "Demo")}" class="demo-media" />`;
-      return `<div class="demo-tile">${media}</div>`;
+      const note = demo.note
+        ? `<p class="demo-note">${esc(demo.note)}</p>`
+        : "";
+      return `<div class="demo-tile">${media}${note}</div>`;
     }).join("")}</div>`;
   }
 
