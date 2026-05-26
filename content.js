@@ -137,6 +137,12 @@ async function main() {
             alt:  "Genie interface screenshot from April 3.",
           },
         ],
+        experiments: [
+          {
+            src: "adverserialExperiment.svg",
+            alt: "Adversarial revision experiment result.",
+          },
+        ],
         artifacts: [
           { label: "Source on GitHub", href: "https://github.com/nishiokj/Genie" },
         ],
@@ -199,23 +205,15 @@ async function main() {
           },
           {
             heading: "Stages, Ephemerals, Externals",
-            body:    `A trial runs against a case: a declared problem, unwrapped and materialized into a workspace. The trial runtime is the chain of stages that operate on that workspace — the agent, the grader, and any other stages — wired by the runner, which carries each stage's output into the next as a Transport Envelope. A stage declares only its own input and output and never knows what runs before or after it. That wiring is the line between the three primitives. A Stage is a link in the chain — transport is ours. An Ephemeral runs off the chain, but the runner still owns its lifecycle: sidecars, MCP servers, memory systems, spun up for the trial and torn down with it. An External is off the chain and outside our jurisdiction entirely — network egress, credentials, third-party APIs; declaring them is what gives you hard accounting of everything that crossed the boundary. So the test is two questions: is it a link we wired? Then it's a Stage. If not, do we own its lifecycle? Ephemeral if yes, External if no. The workspace itself is none of the three — not machinery, but the subject the machinery acts on. The Transport Envelope is the uniform shape that keeps all of this declarative even as the things at the boundary diverge.`,
+            body:    `Bucephalus models top-level YAML resource declarations as three primitives: Stages, Ephemerals, and Externals. The distinction is whether the runner wires the resource into the trial, owns its lifecycle, or simply records that the trial crossed an external boundary. A Stage is a link in the chain — transport is ours. An Ephemeral runs off the chain, but the runner still owns its lifecycle: sidecars, MCP servers, memory systems, spun up for the trial and torn down with it. An External is off the chain and outside our jurisdiction entirely — network egress, credentials, third-party APIs; declaring them is what gives you hard accounting of everything that crossed the boundary. So the test is two questions: is it a link we wired? Then it's a Stage. If not, do we own its lifecycle? Ephemeral if yes, External if no. The workspace itself is none of the three — not machinery, but the subject the machinery acts on. The Transport Envelope is the uniform shape that keeps all of this declarative even as the things at the boundary diverge.`,
           },
           {
             heading: "Transactional trial results",
             body:    `Recovery happens at the experiment level, not the trial. If the runner is shut down, in-progress trials are not resumed — their partial work is rolled back. Reverting a trial's mid-flight state is hard, and even if you manage it, you'll likely hit a cache miss that confounds the result anyway. A clean slate is simpler and more trustworthy.`,
           },
           {
-            heading: "Experiments on synthetic data primitives",
-            body:    `I used the harness to run experiments on different compositions of synthetic data pipelines, to understand the effects of primitives like adversarial review, quality gating, and environment seeding with globally stateful checks for seed diversity. This was fairly naive — over a massive set of data, I wouldn't necessarily believe RAG/seed-taxonomy de-duping would guarantee tail coverage — but for generating a few dozen examples it seemed to help quite a bit. I also tested LLM-as-a-Judge across different models and providers, including counterfactual experiments measuring the judge's propensity for false positives — things like same-provider correlation, where the judge comes from the same lab as the generator.`,
-          },
-          {
             heading: "Pause / resume / recover, with tiered pre-flight",
             body:    `One of the key aspects of the runner is that experiments can be paused, resumed, and recovered, because they need to run for long periods of time. I set up a sophisticated tiering of smoke tests and linting into the harness, so that by the time you launch a full run you have high confidence in at least mechanical viability.`,
-          },
-          {
-            heading: "Closed-loop regression / observability / curation",
-            body:    `Agent systems that aren't fixed to a static model or harness need a closed-loop regression, observability+trace, and curation pipeline, because frequent updates should be evaluated. But these are expensive and slow, so it's crucial to be surgical — a bunch of redundant ones are pure cost, and would likely signal other underexamined behaviors.`,
           },
         ],
         demo: null,

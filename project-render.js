@@ -197,7 +197,9 @@
   if (d.experiments && d.experiments.length > 0) {
     document.querySelector("[data-experiments-rule]").hidden = false;
     document.querySelector("[data-experiments-section]").hidden = false;
-    document.querySelector("[data-experiments]").innerHTML = d.experiments
+    const experimentsEl = document.querySelector("[data-experiments]");
+    experimentsEl.classList.toggle("experiments-grid--multi", d.experiments.length > 1);
+    experimentsEl.innerHTML = d.experiments
       .map((e) => `
         <figure class="chart">
           <img src="${esc(e.src)}" alt="${esc(e.alt)}" />
