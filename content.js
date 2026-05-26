@@ -196,10 +196,6 @@ async function main() {
         },
         decisions: [
           {
-            heading: "Declarative configuration",
-            body:    `I think this provides the correct surface for the idea that many experiments will need to be run. Going back to "how do I verify this large piece of content", being able to look at a single YAML file and understand what existed during that experiment and where the metrics were derived from really helps provide context for the results.`,
-          },
-          {
             heading: "Rust",
             body:    `Experiments need to be able to run for hours or possibly even days. Memory safety is crucial.`,
           },
@@ -208,11 +204,11 @@ async function main() {
             body:    `Bucephalus models top-level YAML resource declarations as three primitives: Stages, Ephemerals, and Externals. The distinction is whether the runner wires the resource into the trial, owns its lifecycle, or simply records that the trial crossed an external boundary. A Stage is a link in the chain — transport is ours. An Ephemeral runs off the chain, but the runner still owns its lifecycle: sidecars, MCP servers, memory systems, spun up for the trial and torn down with it. An External is off the chain and outside our jurisdiction entirely — network egress, credentials, third-party APIs; declaring them is what gives you hard accounting of everything that crossed the boundary. So the test is two questions: is it a link we wired? Then it's a Stage. If not, do we own its lifecycle? Ephemeral if yes, External if no. The workspace itself is none of the three — not machinery, but the subject the machinery acts on. The Transport Envelope is the uniform shape that keeps all of this declarative even as the things at the boundary diverge.`,
           },
           {
-            heading: "Transactional trial results",
-            body:    `Recovery happens at the experiment level, not the trial. If the runner is shut down, in-progress trials are not resumed — their partial work is rolled back. Reverting a trial's mid-flight state is hard, and even if you manage it, you'll likely hit a cache miss that confounds the result anyway. A clean slate is simpler and more trustworthy.`,
+            heading: "Declarative configuration",
+            body:    `I think this provides the correct surface for the idea that many experiments will need to be run. Going back to "how do I verify this large piece of content", being able to look at a single YAML file and understand what existed during that experiment and where the metrics were derived from really helps provide context for the results.`,
           },
           {
-            heading: "Pause / resume / recover, with tiered pre-flight",
+            heading: "Heavy pre-flight checks and Recoverability",
             body:    `One of the key aspects of the runner is that experiments can be paused, resumed, and recovered, because they need to run for long periods of time. I set up a sophisticated tiering of smoke tests and linting into the harness, so that by the time you launch a full run you have high confidence in at least mechanical viability.`,
           },
         ],
@@ -249,20 +245,20 @@ async function main() {
                 lead: "Observability",
                 text: `If you don't have something for observing traces locally, build one. It will not take long. This is table stakes. Feedback loops.`,
               },
+              {
+                lead: "Parent-dispatched subagents over parallel agents",
+                text: `With parallel agents, I often found that the juice wasn't worth the squeeze. It quickly becomes a coordination problem where each agent's context window represents a very difficult sync problem. Subagents dispatched in parallel by a parent were stronger: intent scoped via a central planner provides much better up-front coordination. Intent originating from a single brain sacrifices maximum parallelism but makes execution much more salient.`,
+              },
             ],
           },
         ],
-        decisions: [
-          {
-            heading: "Parent-dispatched subagents over parallel agents",
-            body:    `With parallel agents, I often found that the juice wasn't worth the squeeze. It quickly becomes a coordination problem where each agent's context window represents a very difficult sync problem. Subagents dispatched in parallel by a parent were stronger: intent scoped via a central planner provides much better up-front coordination. Intent originating from a single brain sacrifices maximum parallelism but makes execution much more salient.`,
-          },
-        ],
+        decisions: [],
         demo: [
           {
             type: "image",
             src:  "nova-tui.png",
             alt:  "Nova TUI interface.",
+            note: "Pictured above is the Nova TUI.",
           },
           {
             type: "image",
