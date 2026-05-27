@@ -78,11 +78,11 @@
       <div class="project">
         <dt class="project-title">
           ${"" /* p.tag ? `<span class="project-tag">${esc(p.tag)}</span>` : "" */}
+          ${stack}
           <div class="project-heading-row">
             <h2>${title}</h2>
             <time class="project-date" datetime="${esc(p.datetime)}">${esc(nb(formatProjectDate(p.datetime, p.date)))}</time>
           </div>
-          ${stack}
         </dt>
         <dd class="project-body">
           <span>${esc(p.body)}</span>
