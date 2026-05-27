@@ -26,6 +26,11 @@
       "tag": "Tool Execution Environments",
       "slug": "substrate",
       "body": "Rust-based tool execution substrate that separates an agent's control layer from execution, so tool implementations don't have to be rebuilt per language and product.",
+      "stack": [
+        "Rust",
+        "Python SDK",
+        "TypeScript SDK"
+      ],
       "date": "May 2026",
       "datetime": "2026-05",
       "detail": {
@@ -74,7 +79,12 @@
       "title": "Genie",
       "tag": "Benchmark Case Quality",
       "slug": "genie",
-      "body": "Synthetic data workflow leveraging Adversarial Revision and LLM-as-a-judge ",
+      "body": "Opinionated benchmark-case workflow based on adversarial revision and LLM-as-Judge review, aimed at selecting cases with real diagnostic pressure instead of polished-looking noise.",
+      "stack": [
+        "Python",
+        "LLM-as-Judge",
+        "Adversarial revision"
+      ],
       "date": "Apr 2026",
       "datetime": "2026-04",
       "detail": {
@@ -122,10 +132,37 @@
       "tag": "Agent Experimentation",
       "slug": "bucephalus",
       "body": "Rust-based experiment harness designed around the idea that experiments will need to be long-lived, agent-driven, and support a variety of shapes.",
+      "stack": [
+        "Rust",
+        "Modal sandboxes",
+        "SQLite",
+        "R2"
+      ],
       "date": "Dec 2025",
       "datetime": "2025-12",
       "detail": {
         "why": [
+          {
+            "html": "Per <a href=\"https://metr.org/\" target=\"_blank\" rel=\"noopener\">METR</a>'s <em>Task-Completion Time Horizons of Frontier Models</em>, a single agent run can stretch anywhere from four to sixteen hours. The question we're left to answer: how do we validate millions of tokens, giant diffs, and features being built without us in the loop? How do we measure how agent systems are performing while we're still developing them? This is an epistemic problem. I find it interesting and widely applicable:"
+          },
+          {
+            "list": "ul",
+            "items": [
+              {
+                "lead": "Unit Testing",
+                "text": "An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2. Not to mention, we need to assume the guy who built the B-2 did so by following a markdown file written by a second guy describing how he thinks a B-2 should look. Each step is characterized by a lossy materialization of intent from the previous step and a lack of a hard feedback loop.",
+                "pullQuote": "An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2."
+              },
+              {
+                "lead": "Benchmarks",
+                "text": "How do you create a benchmark case that can be verified deterministically? A lot of benchmarks have answered this question by making the problem as narrow as possible, and thus easy to 'verify'. Think assigning a score to a fill-in-the-blank vs. an essay."
+              },
+              {
+                "lead": "Evals",
+                "text": "A similar issue surfaces with benchmarks, only these will need to be more custom to individual agent deployments, and thus we may need an order of magnitude more. This is part of why process-shaped implementation projects will take off first. You can plug and play an agent in your claims process against historical cases and quickly gauge how it will perform."
+              }
+            ]
+          },
           "I believe that we will continue to want to answer \"What do I make of this huge pile of code? Which model performs best for my use case in production?\" and this becomes disproportionately harder as we scale what we're examining. Although, this may not be true forever. As agents become increasingly competent at long-horizon decision-making, forecasting, and acting rationally, we should ask less, \"Is this patch good?\" and observe more, \"Which agent is making the most money in our simulated marketplace?\" or \"How accurately does the agent predict the Mayor of Topeka in 1908 using newspaper clippings from the year leading up to the election?\" This, of course, leads to a different class of problems, but even these are experiments.",
           "I think process-shaped systems in enterprises are quite ripe, because existing systems already provide evals, KPIs, and a lot of the hardest epistemic infrastructure. By providing a solid bar to measure against, this contextualizes results, especially if you can reuse actual production inputs. I think it is very important to leverage this. Any mechanism that reveals trusted information about a body of work an agent performed is increasingly valuable. This is why things like Karpathy's autoresearch work so well: the agent gets feedback from its actions that is relatively unfalsifiable."
         ],
@@ -174,13 +211,39 @@
       "tag": "Agent harness",
       "slug": "nova",
       "body": "Model-agnostic harness for orchestrating filesystem agents and subagents.",
+      "stack": [
+        "TypeScript",
+        "Terminal UI",
+        "Agent tracing"
+      ],
       "date": "Oct 2025",
       "datetime": "2025-10",
       "detail": {
         "why": [
           "You could be reading this and wondering, \"What does this do that Claude Code, Codex, OpenClaw, etc. doesn't?\" The answer is nothing. Or nothing really of note. I started this project all the way back in fall 2025, pre-OpenClaw and when Codex was mud and sticks.",
           "Nova started as a voice agent on a Raspberry Pi, which I moved away from after I ported it from Python to TypeScript and did not want to mess with a new VAD/beamforming package.",
-          "I made a lot of mistakes and learned a lot of lessons."
+          "I made a lot of mistakes and learned a lot of lessons.",
+          {
+            "list": "ul",
+            "items": [
+              {
+                "lead": "Plan, Execute, Reflect as built-in program scaffolding",
+                "text": "This was restrictive, slow, and carried way too much task state in program memory. I had an epiphany: \"Let them cook.\" The harness should not be opinionated about 'how' the agent works. You provide the boundaries, or the 'what' it can do."
+              },
+              {
+                "lead": "Testing with a slow model to save money",
+                "text": "Shoutout to Z.ai. The GLM series is great, but they are SLOW. You will be tempted to use a subscription to a Chinese open-source lab when wasting tokens iterating early on. I would advise against it. This mistake was made worse by the API not supporting structured outputs, and the tool-calling accuracy I would call a 'mixed bag' if I were trying to be charitable. If I were trying to be negative, I would call it a 'mixed bag' because a blind man reaching into a mixed bag of my tool definitions would have pulled the right one out just as often. And he might even have remembered to fence his JSON."
+              },
+              {
+                "lead": "Observability",
+                "text": "If you don't have something for observing traces locally, build one. It will not take long. This is table stakes. Feedback loops."
+              },
+              {
+                "lead": "Parent-dispatched subagents over parallel agents",
+                "text": "With parallel agents, I often found that the juice wasn't worth the squeeze. It quickly becomes a coordination problem where each agent's context window represents a very difficult sync problem. Subagents dispatched in parallel by a parent were stronger: intent scoped via a central planner provides much better up-front coordination. Intent originating from a single brain sacrifices maximum parallelism but makes execution much more salient."
+              }
+            ]
+          }
         ],
         "decisions": [],
         "demo": [

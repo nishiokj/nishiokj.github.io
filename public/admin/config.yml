@@ -43,6 +43,11 @@ collections:
               - { label: Tag, name: tag, widget: string, required: false }
               - { label: Slug, name: slug, widget: string, required: false }
               - { label: Summary, name: body, widget: text }
+              - label: Stack
+                name: stack
+                widget: list
+                required: false
+                field: { label: Item, name: item, widget: string }
               - { label: Display Date, name: date, widget: string }
               - { label: Machine Date, name: datetime, widget: string }
               - label: Detail

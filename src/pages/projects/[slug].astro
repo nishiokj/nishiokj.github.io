@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import site from "../../data/site.json";
-import { assetPath, escapeHtml, renderCode, renderProseBlocks } from "../../lib/render";
+import { assetPath, formatProjectDate, renderCode, renderProseBlocks } from "../../lib/render";
 
 export function getStaticPaths() {
   return site.projects
@@ -19,21 +19,33 @@ const hasWhat = detail.what && (detail.what.intro?.length > 0 || detail.what.yam
 const defaultSampleIndex = detail.samples
   ? Math.max(0, detail.samples.findIndex((sample) => sample.language === "py"))
   : 0;
+const githubLink = detail.artifacts?.find((artifact) => /github\.com/i.test(artifact.href));
 ---
 
-<BaseLayout title={title} description={project.body}>
+<BaseLayout title={title} description={project.body} mainClass="project-detail-main">
   <nav class="project-nav">
     <a href="/" class="back-link">&lt;- {site.name}</a>
   </nav>
 
   <header class="project-detail-header">
     <h1>{project.title}</h1>
-    <time class="project-detail-date" datetime={project.datetime}>{project.date}</time>
   </header>
 
-  <hr class="rule" />
-
   <p class="project-lede">{project.body}</p>
+  {project.stack?.length > 0 && (
+    <ul class="project-stack project-detail-stack">
+      {project.stack.map((item) => <li>{item}</li>)}
+    </ul>
+  )}
+  <div class="project-detail-meta">
+    <time class="project-detail-date" datetime={project.datetime}>{formatProjectDate(project.datetime, project.date, "long")}</time>
+    {githubLink && (
+      <a class="project-detail-github" href={githubLink.href} target="_blank" rel="noopener">
+        <img src="/icons/github-icon.png" alt="" aria-hidden="true" />
+        <span>{githubLink.label.replace(/^Source on /i, "")}</span>
+      </a>
+    )}
+  </div>
 
   {detail.why?.length > 0 && (
     <>
@@ -171,21 +183,6 @@ const defaultSampleIndex = detail.samples
       </section>
     </>
   )}
-
-  <hr class="rule" />
-
-  <section>
-    <h2 class="section-label">Link to GitHub</h2>
-    <ul class="artifacts-list">
-      {detail.artifacts?.length > 0 ? detail.artifacts.map((artifact) => (
-        <li class="artifact-item">
-          <a href={artifact.href} target="_blank" rel="noopener">{artifact.label}</a>
-        </li>
-      )) : (
-        <li class="artifact-item" style="color:var(--muted);font-style:italic">No artifacts listed.</li>
-      )}
-    </ul>
-  </section>
 
   {detail.samples?.length > 0 && (
     <script>

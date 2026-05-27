@@ -5,6 +5,7 @@ import "../styles/experiment-journey.css";
 const {
   title = "Jevin Nishioka",
   description = "Portfolio of Jevin Nishioka.",
+  mainClass,
 } = Astro.props;
 ---
 
@@ -18,7 +19,7 @@ const {
     <link rel="icon" href="data:," />
   </head>
   <body>
-    <main>
+    <main class={mainClass}>
       <slot />
     </main>
   </body>

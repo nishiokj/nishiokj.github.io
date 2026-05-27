@@ -5,6 +5,27 @@ export function assetPath(path = "") {
   return `/${path}`;
 }
 
+export function linkIcon(link: { label?: string; href?: string }) {
+  const label = String(link.label || "").toLowerCase();
+  const href = String(link.href || "").toLowerCase();
+  if (label.includes("github") || href.includes("github.com")) return "/icons/github-icon.png";
+  if (label.includes("linkedin") || href.includes("linkedin.com")) return "/icons/linkedin-icon.webp";
+  if (href.startsWith("mailto:")) return "/icons/mail-lucide.svg";
+  return "";
+}
+
+export function formatProjectDate(datetime: string, fallback: string, month: "short" | "long" = "short") {
+  const [year, rawMonth] = String(datetime || "").split("-");
+  const date = year && rawMonth ? new Date(Number(year), Number(rawMonth) - 1, 1) : null;
+  if (!date || Number.isNaN(date.getTime())) return fallback;
+  const formatted = date.toLocaleDateString("en-US", { month, year: "numeric" });
+  return month === "short" ? formatted.toUpperCase() : formatted;
+}
+
+export function renderInlineBlock(block: any) {
+  return typeof block === "string" ? escapeHtml(block) : block?.html || "";
+}
+
 export function renderCode(code: string, language: string) {
   const escaped = escapeHtml(code);
   if (language === "py") {
