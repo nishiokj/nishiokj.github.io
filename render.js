@@ -71,52 +71,26 @@
       const title = detailHref
         ? `<a href="${detailHref}"${linkAttrs}>${esc(p.title)}</a>`
         : esc(p.title);
-      const cardAttrs = detailHref
-        ? ` data-card-href="${detailHref}"${external ? ' data-card-external="true"' : ""} role="link" tabindex="0" aria-label="Read more about ${esc(p.title)}"`
-        : "";
       const stack = p.stack?.length
         ? `<ul class="project-stack">${p.stack.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>`
         : "";
       return `
-      <div class="project${detailHref ? " project--link" : ""}"${cardAttrs}>
+      <div class="project">
         <dt class="project-title">
           ${"" /* p.tag ? `<span class="project-tag">${esc(p.tag)}</span>` : "" */}
           <div class="project-heading-row">
             <h2>${title}</h2>
             <time class="project-date" datetime="${esc(p.datetime)}">${esc(nb(formatProjectDate(p.datetime, p.date)))}</time>
           </div>
+          ${stack}
         </dt>
         <dd class="project-body">
           <span>${esc(p.body)}</span>
-          ${stack}
           ${p.slug ? `<a href="project.html?slug=${esc(p.slug)}" class="read-more">Read more →</a>` : ""}
         </dd>
       </div>`;
     })
     .join("");
-
-  document.querySelectorAll("[data-card-href]").forEach((card) => {
-    const openCard = () => {
-      const href = card.getAttribute("data-card-href");
-      if (!href) return;
-      if (card.getAttribute("data-card-external") === "true") {
-        window.open(href, "_blank", "noopener");
-      } else {
-        window.location.href = href;
-      }
-    };
-
-    card.addEventListener("click", (event) => {
-      if (event.target.closest("a")) return;
-      openCard();
-    });
-
-    card.addEventListener("keydown", (event) => {
-      if (event.key !== "Enter" && event.key !== " ") return;
-      event.preventDefault();
-      openCard();
-    });
-  });
 
   // Footer
   const t = document.querySelector("[data-updated]");
