@@ -33,10 +33,6 @@ import { assetPath, formatProjectDate, linkIcon, nbsp, renderInlineBlock } from 
     </div>
   </header>
 
-  <hr class="rule rule--accent" />
-
-  <section class="experiment-journey" data-experiment-journey aria-label="Vendor payment experiment journey"></section>
-
   <hr class="rule" />
 
   <section class="work">
@@ -74,8 +70,8 @@ import { assetPath, formatProjectDate, linkIcon, nbsp, renderInlineBlock } from 
               </div>
             </dt>
             <dd class="project-body">
-              <span>{project.body}</span>
-              {project.slug && <a href={`/projects/${project.slug}/`} class="read-more">Read more -&gt;</a>}
+              <p class="project-summary">{project.body}</p>
+              {project.slug && <a href={`/projects/${project.slug}/`} class="read-more">Technical writeup -&gt;</a>}
             </dd>
           </div>
         );
@@ -89,6 +85,4 @@ import { assetPath, formatProjectDate, linkIcon, nbsp, renderInlineBlock } from 
     <span class="colophon">Last updated <time datetime={site.footer.updatedDatetime}>{nbsp(site.footer.updated)}</time></span>
     <span class="colophon">{site.footer.copyright}</span>
   </footer>
-
-  <script src="/experiment-journey.js" is:inline></script>
 </BaseLayout>

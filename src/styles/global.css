@@ -240,14 +240,16 @@ main {
 }
 
 .project-body {
-  display: flex;
-  flex-direction: column;
   margin: 0.65rem 0 0;
   max-width: 48rem;
   min-width: 0;
   color: var(--ink);
   font-size: var(--size-subhead);
   line-height: 1.45;
+}
+
+.project-summary {
+  margin: 0;
 }
 
 .project-stack {
@@ -273,8 +275,8 @@ main {
 }
 
 .read-more {
-  display: inline-flex;
-  align-self: flex-start;
+  display: block;
+  width: fit-content;
   margin: 1rem 0 0;
   font-size: var(--size-caption);
   font-family: var(--sans-body);
