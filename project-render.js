@@ -10,6 +10,13 @@
       "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
     }[c]));
 
+  const formatProjectDate = (datetime, fallback) => {
+    const [year, month] = String(datetime || "").split("-");
+    const date = year && month ? new Date(Number(year), Number(month) - 1, 1) : null;
+    if (!date || Number.isNaN(date.getTime())) return fallback;
+    return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+  };
+
   function renderCode(code, language) {
     const escaped = esc(code);
     if (language === "py") {
@@ -81,12 +88,24 @@
   document.title = `${project.title} — Jevin Nishioka`;
   document.querySelector("[data-title]").textContent = project.title;
   document.querySelector("[data-body]").textContent = project.body;
+  const stackEl = document.querySelector("[data-stack]");
+  if (project.stack?.length > 0) {
+    stackEl.hidden = false;
+    stackEl.innerHTML = project.stack.map((item) => `<li>${esc(item)}</li>`).join("");
+  }
 
   const dateEl = document.querySelector("[data-date]");
-  dateEl.textContent = project.date;
+  dateEl.textContent = formatProjectDate(project.datetime, project.date);
   dateEl.setAttribute("datetime", project.datetime);
 
   const d = project.detail;
+  const githubLink = d.artifacts?.find((artifact) => /github\.com/i.test(artifact.href));
+  const githubEl = document.querySelector("[data-github]");
+  if (githubLink) {
+    githubEl.hidden = false;
+    githubEl.href = githubLink.href;
+    githubEl.innerHTML = `<img src="icons/github-icon.png" alt="" aria-hidden="true" /><span>${esc(githubLink.label.replace(/^Source on /i, ""))}</span>`;
+  }
 
   // Why I built this (optional)
   if (d.why && d.why.length > 0) {
@@ -215,16 +234,4 @@
     document.querySelector("[data-other-experiments]").innerHTML = renderProseBlocks(d.otherExperiments);
   }
 
-  // Artifacts
-  const artifactsEl = document.querySelector("[data-artifacts]");
-  if (!d.artifacts || d.artifacts.length === 0) {
-    artifactsEl.innerHTML = `<li class="artifact-item" style="color:var(--muted);font-style:italic">No artifacts listed.</li>`;
-  } else {
-    artifactsEl.innerHTML = d.artifacts
-      .map((a) => `
-        <li class="artifact-item">
-          <a href="${esc(a.href)}" target="_blank" rel="noopener">${esc(a.label)}</a>
-        </li>`)
-      .join("");
-  }
 })();
