@@ -1,0 +1,205 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import site from "../../data/site.json";
+import { assetPath, escapeHtml, renderCode, renderProseBlocks } from "../../lib/render";
+
+export function getStaticPaths() {
+  return site.projects
+    .filter((project) => project.slug)
+    .map((project) => ({
+      params: { slug: project.slug },
+      props: { project },
+    }));
+}
+
+const { project } = Astro.props;
+const detail = project.detail || {};
+const title = `${project.title} - ${site.name}`;
+const hasWhat = detail.what && (detail.what.intro?.length > 0 || detail.what.yaml || detail.what.diagram);
+const defaultSampleIndex = detail.samples
+  ? Math.max(0, detail.samples.findIndex((sample) => sample.language === "py"))
+  : 0;
+---
+
+<BaseLayout title={title} description={project.body}>
+  <nav class="project-nav">
+    <a href="/" class="back-link">&lt;- {site.name}</a>
+  </nav>
+
+  <header class="project-detail-header">
+    <h1>{project.title}</h1>
+    <time class="project-detail-date" datetime={project.datetime}>{project.date}</time>
+  </header>
+
+  <hr class="rule" />
+
+  <p class="project-lede">{project.body}</p>
+
+  {detail.why?.length > 0 && (
+    <>
+      <hr class="rule" />
+      <section>
+        <h2 class="section-label">Why I built this</h2>
+        <div class="prose-blocks" set:html={renderProseBlocks(detail.why)} />
+      </section>
+    </>
+  )}
+
+  {hasWhat && (
+    <>
+      <hr class="rule" />
+      <section>
+        {detail.what.label !== "" && detail.what.label !== false && (
+          <h2 class="section-label">{detail.what.label || "What it is"}</h2>
+        )}
+        <div class="prose-blocks">
+          {detail.what.intro?.length > 0 && <Fragment set:html={renderProseBlocks(detail.what.intro)} />}
+          {(detail.what.yaml || detail.what.diagram) && (
+            detail.what.yaml ? (
+              <div class="what-figure-row">
+                <pre class="arch-yaml"><code>{detail.what.yaml}</code></pre>
+                {detail.what.diagram && (
+                  <figure class="chart">
+                    <img src={assetPath(detail.what.diagram.src)} alt={detail.what.diagram.alt || "Architecture diagram"} />
+                    {detail.what.diagram.caption && <figcaption class="chart-caption">{detail.what.diagram.caption}</figcaption>}
+                  </figure>
+                )}
+              </div>
+            ) : (
+              <div class="arch-diagram">
+                <figure class="chart">
+                  <img src={assetPath(detail.what.diagram.src)} alt={detail.what.diagram.alt || "Architecture diagram"} />
+                  {detail.what.diagram.caption && <figcaption class="chart-caption">{detail.what.diagram.caption}</figcaption>}
+                </figure>
+              </div>
+            )
+          )}
+        </div>
+      </section>
+    </>
+  )}
+
+  {detail.decisions?.length > 0 && (
+    <>
+      <hr class="rule" />
+      <section>
+        <h2 class="section-label">Decisions</h2>
+        <div class="decisions-list">
+          {detail.decisions.map((decision, index) => (
+            <div class="decision-item">
+              <span class="decision-num">{String(index + 1).padStart(2, "0")}</span>
+              <div>
+                <h3 class="decision-heading">{decision.heading}</h3>
+                <p class="decision-body">{decision.body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </>
+  )}
+
+  {detail.demo && (
+    <>
+      <hr class="rule" />
+      <section>
+        <h2 class="section-label">{detail.demoLabel || "Demo"}</h2>
+        <div>
+          <div class="demo-grid">
+            {(Array.isArray(detail.demo) ? detail.demo : [detail.demo]).map((demo) => (
+              <div class="demo-tile">
+                {demo.type === "video" ? (
+                  <video src={assetPath(demo.src)} controls class="demo-media"></video>
+                ) : (
+                  <img src={assetPath(demo.src)} alt={demo.alt || "Demo"} class="demo-media" />
+                )}
+                {demo.note && <p class="demo-note">{demo.note}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  )}
+
+  {detail.samples?.length > 0 && (
+    <>
+      <hr class="rule" />
+      <section>
+        <h2 class="section-label">{detail.samplesLabel || "Samples"}</h2>
+        <div class="samples-list">
+          <div class="sample-tabs" role="tablist">
+            {detail.samples.map((sample, index) => (
+              <button class:list={["sample-tab", { "is-active": index === defaultSampleIndex }]} type="button" data-sample-tab={index}>
+                {sample.language === "py" ? "Python" : sample.language === "ts" ? "TypeScript" : sample.language}
+              </button>
+            ))}
+          </div>
+          <div class="sample-panels">
+            {detail.samples.map((sample, index) => (
+              <pre class="sample-code" hidden={index !== defaultSampleIndex} data-sample-panel={index}><code set:html={renderCode(sample.code, sample.language)} /></pre>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  )}
+
+  {detail.experiments?.length > 0 && (
+    <>
+      <hr class="rule" />
+      <section>
+        <h2 class="section-label">Experiments</h2>
+        <div class:list={["grid-3", "experiments-grid", { "experiments-grid--multi": detail.experiments.length > 1 }]}>
+          {detail.experiments.map((experiment) => (
+            <figure class="chart">
+              <img src={assetPath(experiment.src)} alt={experiment.alt} />
+              <figcaption class="chart-caption">{experiment.alt}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+    </>
+  )}
+
+  {detail.otherExperiments?.length > 0 && (
+    <>
+      <hr class="rule" />
+      <section>
+        <h2 class="section-label">Other Experiments I've run</h2>
+        <div class="prose-blocks" set:html={renderProseBlocks(detail.otherExperiments)} />
+      </section>
+    </>
+  )}
+
+  <hr class="rule" />
+
+  <section>
+    <h2 class="section-label">Link to GitHub</h2>
+    <ul class="artifacts-list">
+      {detail.artifacts?.length > 0 ? detail.artifacts.map((artifact) => (
+        <li class="artifact-item">
+          <a href={artifact.href} target="_blank" rel="noopener">{artifact.label}</a>
+        </li>
+      )) : (
+        <li class="artifact-item" style="color:var(--muted);font-style:italic">No artifacts listed.</li>
+      )}
+    </ul>
+  </section>
+
+  {detail.samples?.length > 0 && (
+    <script>
+      document.querySelectorAll("[data-sample-tab]").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const index = tab.getAttribute("data-sample-tab");
+          document.querySelectorAll("[data-sample-tab]").forEach((node) => {
+            node.classList.toggle("is-active", node === tab);
+          });
+          document.querySelectorAll("[data-sample-panel]").forEach((panel) => {
+            panel.hidden = panel.getAttribute("data-sample-panel") !== index;
+          });
+        });
+      });
+    </script>
+  )}
+</BaseLayout>

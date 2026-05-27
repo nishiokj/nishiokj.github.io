@@ -1,0 +1,17 @@
+---
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <script>
+      const slug = new URLSearchParams(window.location.search).get("slug");
+      window.location.replace(slug ? `/projects/${slug}/` : "/");
+    </script>
+  </head>
+  <body>
+    <a href="/">Go to portfolio</a>
+  </body>
+</html>

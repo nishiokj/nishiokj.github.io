@@ -1,0 +1,78 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import site from "../data/site.json";
+import { assetPath, nbsp } from "../lib/render";
+---
+
+<BaseLayout title={site.name}>
+  <header class="masthead">
+    <h1>{site.name}</h1>
+    <ul class="links masthead-links">
+      {site.links.map((link) => {
+        const external = /^https?:/i.test(link.href);
+        return (
+          <li>
+            <a href={link.href} target={external ? "_blank" : undefined} rel={external ? "noopener me" : undefined}>
+              {link.label}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+    <div class="bio">
+      {site.bio.map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+  </header>
+
+  <hr class="rule rule--accent" />
+
+  <section class="experiment-journey" data-experiment-journey aria-label="Vendor payment experiment journey"></section>
+
+  <hr class="rule" />
+
+  <section class="work">
+    {site.projectsIntro?.length > 0 && (
+      <div class="projects-intro">
+        {site.projectsIntro.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    )}
+    <dl class="projects">
+      {site.projects.map((project) => {
+        const detailHref = project.slug
+          ? `/projects/${project.slug}/`
+          : project.href
+            ? assetPath(project.href)
+            : null;
+        const external = project.href && !project.slug;
+        return (
+          <div class="project">
+            <dt class="project-title">
+              <h2>
+                {detailHref ? (
+                  <a href={detailHref} target={external ? "_blank" : undefined} rel={external ? "noopener" : undefined}>
+                    {project.title}
+                  </a>
+                ) : project.title}
+                {project.tag && <span class="project-tag">{project.tag}</span>}
+              </h2>
+            </dt>
+            <time class="project-date" datetime={project.datetime}>{nbsp(project.date)}</time>
+            <dd class="project-body">
+              {project.body}
+              {project.slug && <><span> </span><a href={`/projects/${project.slug}/`} class="read-more">Read more -></a></>}
+            </dd>
+          </div>
+        );
+      })}
+    </dl>
+  </section>
+
+  <hr class="rule" />
+
+  <footer class="colophon-row">
+    <span class="colophon">Last updated <time datetime={site.footer.updatedDatetime}>{nbsp(site.footer.updated)}</time></span>
+    <span class="colophon">{site.footer.copyright}</span>
+  </footer>
+
+  <script src="/experiment-journey.js" is:inline></script>
+</BaseLayout>

@@ -107,9 +107,9 @@ async function main() {
     },
     {
       title:    "Genie",
-      tag:      "Synthetic data",
+      tag:      "Benchmark Case Quality",
       slug:     "genie",
-      body:     "Opinionated data generation workflow based on the adversarial revision + LLM-as-Judge pattern, which aids in reducing common quality issues in synthetic data.",
+      body:     "Opinionated benchmark-case workflow based on adversarial revision and LLM-as-Judge review, aimed at selecting cases with real diagnostic pressure instead of polished-looking noise.",
       date:     "Apr 2026",
       datetime: "2026-04",
       detail: {
@@ -205,7 +205,7 @@ async function main() {
           },
           {
             heading: "Declarative configuration",
-            body:    `I think this provides the correct surface for the idea that many experiments will need to be run. Going back to "how do I verify this large piece of content", being able to look at a single YAML file and understand what existed during that experiment and where the metrics were derived from really helps provide context for the results.`,
+            body:    `I think this provides the correct surface for the idea that many experiments will need to be run. Going back to "how do I verify this large piece of content", being able to look at a single YAML file and understand what existed during that experiment and where the metrics came from really helps provide context for the results.`,
           },
           {
             heading: "Heavy pre-flight checks and Recoverability",

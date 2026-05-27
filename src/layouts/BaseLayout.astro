@@ -1,0 +1,25 @@
+---
+import "../styles/global.css";
+import "../styles/experiment-journey.css";
+
+const {
+  title = "Jevin Nishioka",
+  description = "Portfolio of Jevin Nishioka.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
