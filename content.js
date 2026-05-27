@@ -16,7 +16,9 @@ window.SITE = {
   ],
 
   projectsIntro: [
-    `Independently, I have been focusing on what I believe is the most pressing question for deploying AI systems today: how do we verify enormous amounts of agent-driven content? The projects below are where I am working on answers.`,
+    {
+      html: `Independently, I have been focusing on what I believe is the most pressing question for deploying AI systems today: <strong>how do we verify enormous amounts of agent-driven content?</strong>`,
+    },
   ],
 
   links: [

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;500&display=swap");
+
 /* ---------------------------------------------------------------------------
    Tokens — pulled from Experiments/tools/charts/brand/tokens.py.
 --------------------------------------------------------------------------- */
@@ -5,11 +7,13 @@
   --ink:    #1B1B1F;
   --muted:  #5F5A50;
   --accent: #A6342B;
-  --bg:     #F6F1E6;
+  --bg:     #faf8f6;
   --grid:   #E3DBC9;
+  --badge:  #E8E6E1;
 
-  --serif-display: "Charter", "Iowan Old Style", "Hoefler Text", "Georgia", "DejaVu Serif", serif;
+  --serif-display: "Crimson Pro", "Charter", "Iowan Old Style", "Hoefler Text", "Georgia", "DejaVu Serif", serif;
   --serif-body:    "Charter", "Georgia", "DejaVu Serif", serif;
+  --sans-body:     -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Arial, sans-serif;
 
   --size-caption: 0.75rem;    /* 12px */
   --size-body:    1rem;       /* 16px */
@@ -17,18 +21,30 @@
   --size-display: 3rem;       /* 48px */
   --size-section: 1.25rem;    /* 20px */
 
-  --max:    62rem;
-  --gutter: 2rem;
+  --max:    66rem;
+  --gutter: 4.5rem;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--serif-body);
+  font-family: var(--sans-body);
   font-size: var(--size-body);
   line-height: 1.45;
   font-feature-settings: "kern", "liga", "onum";
@@ -39,7 +55,7 @@ body {
 main {
   max-width: var(--max);
   margin: 0 auto;
-  padding: 2.5rem var(--gutter) 1.5rem;
+  padding: 4rem var(--gutter) 3rem;
 }
 
 /* Section labels */
@@ -57,26 +73,29 @@ main {
 .rule {
   border: 0;
   border-top: 1px solid var(--grid);
-  margin: 0.75rem 0;
+  margin: 1.75rem 0;
 }
 
 .rule--accent { border-top-color: var(--accent); }
 
 /* ---------------------------------------------------------------------------
-   Masthead — name, links, bio. All left-aligned, stacked.
+   Masthead — name and bio. All left-aligned, stacked.
 --------------------------------------------------------------------------- */
 .masthead {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 1.6rem;
   width: 100%;
+  min-height: 42vh;
+  padding: 3rem 0 3.5rem;
 }
 
 .masthead h1 {
   font-family: var(--serif-display);
-  font-weight: 700;
-  font-size: var(--size-display);
+  font-weight: 400;
+  font-size: clamp(3.25rem, 5.5vw, 4.75rem);
   line-height: 1;
   letter-spacing: -0.015em;
   margin: 0;
@@ -84,12 +103,35 @@ main {
   white-space: nowrap;
 }
 
+.hero-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2rem;
+  width: 100%;
+  margin: -0.9rem 0 0;
+}
+
+.hero-title {
+  margin: -0.9rem 0 0;
+  font-family: var(--serif-display);
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--accent);
+}
+
+.hero-meta .hero-title {
+  margin: 0;
+}
+
 .bio {
-  margin: 0.35rem 0 0;
+  margin: 0;
   color: var(--ink);
   width: 100%;
-  max-width: 38rem;
-  line-height: 1.5;
+  max-width: 48rem;
+  font-size: 1.25rem;
+  line-height: 1.55;
 }
 
 .bio p {
@@ -100,52 +142,34 @@ main {
   margin-bottom: 0;
 }
 
-.masthead-links {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  gap: 0;
-  font-size: var(--size-caption);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  white-space: nowrap;
-}
-
-.masthead-links li {
-  padding: 0 0.75rem;
-}
-
-.masthead-links li:first-child { padding-left: 0; }
-.masthead-links li:last-child  { padding-right: 0; }
-
-.masthead-links li + li {
-  border-left: 1px solid var(--accent);
-}
-
-.masthead-links a {
-  color: var(--ink);
-  text-decoration: none;
-  border-bottom: 1px solid var(--grid);
-  padding-bottom: 0.08rem;
-  transition: color 120ms ease, border-color 120ms ease;
-}
-
-.masthead-links a:hover,
-.masthead-links a:focus-visible {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-  outline: none;
-}
-
 /* ---------------------------------------------------------------------------
    Projects — stacked cards. Title + date share the top row, body sits below.
 --------------------------------------------------------------------------- */
+.work {
+  display: block;
+}
+
 .projects-intro {
-  max-width: 38rem;
-  margin: 0 0 1.5rem;
+  max-width: 44rem;
+  margin: 0 0 3.5rem;
   color: var(--ink);
-  line-height: 1.5;
+  font-size: 1.125rem;
+  line-height: 1.55;
+}
+
+.projects-intro strong {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.work-heading {
+  font-family: var(--serif-display);
+  font-size: 2.35rem;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 1.15rem;
 }
 
 .projects-intro p {
@@ -161,66 +185,78 @@ main {
   padding: 0;
 }
 
-.project {
-  display: grid;
-  grid-template-columns: 1fr 5rem;
-  column-gap: 1.25rem;
-  align-items: baseline;
-  padding: 0.85rem 0;
-  border-top: 1px solid var(--grid);
+.projects .project:first-child {
+  padding-top: 0;
 }
 
-.project:first-child { border-top: 0; }
-.project:last-child  { border-bottom: 1px solid var(--grid); }
+.project {
+  display: grid;
+  grid-template-columns: 1fr 6.5rem;
+  column-gap: 2.5rem;
+  align-items: baseline;
+  padding: 1.9rem 0;
+}
 
 .project-title {
-  grid-column: 1;
+  grid-column: 1 / -1;
   grid-row: 1;
   margin: 0;
   min-width: 0;
 }
 
 .project-tag {
-  margin-left: 0.75rem;
-  font-family: var(--serif-display);
+  display: inline-flex;
+  margin: 0 0 0.7rem;
+  font-family: var(--sans-body);
   font-size: var(--size-caption);
   font-weight: 400;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  vertical-align: 0.18em;
+  vertical-align: 0.22em;
   white-space: nowrap;
+  background: var(--badge);
+  border-radius: 0.35rem;
+  padding: 0.18rem 0.6rem 0.2rem;
+}
+
+.project-heading-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  min-width: 0;
 }
 
 .project-date {
-  grid-column: 2;
-  grid-row: 1;
-  font-family: var(--serif-display);
+  font-family: var(--sans-body);
   font-size: var(--size-caption);
-  color: var(--ink);
+  font-weight: 400;
+  color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-variant-numeric: lining-nums;
   font-feature-settings: "lnum";
   white-space: nowrap;
-  text-align: right;
+  opacity: 0.72;
 }
 
 .project-body {
   grid-column: 1 / -1;
   grid-row: 2;
-  margin: 0.45rem 0 0;
+  margin: 0.8rem 0 0;
   max-width: 48rem;
   min-width: 0;
   color: var(--ink);
-  line-height: 1.4;
+  font-size: var(--size-subhead);
+  line-height: 1.45;
 }
 
 .read-more {
-  display: inline;
-  margin-left: 0.5em;
+  display: table;
+  margin: 0.7rem 0 0;
   font-size: var(--size-caption);
-  font-family: var(--serif-display);
+  font-family: var(--sans-body);
+  font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--accent);
@@ -239,8 +275,8 @@ main {
 
 .project h2 {
   font-family: var(--serif-display);
-  font-weight: 700;
-  font-size: 1.375rem;
+  font-weight: 500;
+  font-size: 1.55rem;
   line-height: 1.1;
   margin: 0;
   color: var(--accent);
@@ -309,12 +345,47 @@ main {
   justify-content: space-between;
   align-items: baseline;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .colophon {
   font-size: var(--size-caption);
   font-style: italic;
   color: var(--muted);
+}
+
+.contact-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 0.65rem;
+}
+
+.contact-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  color: var(--ink);
+  text-decoration: none;
+  opacity: 0.74;
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.contact-links img {
+  display: block;
+  width: 1.15rem;
+  height: 1.15rem;
+  object-fit: contain;
+}
+
+.contact-links a:hover,
+.contact-links a:focus-visible {
+  opacity: 1;
+  transform: translateY(-1px);
+  outline: none;
 }
 
 /* ---------------------------------------------------------------------------
@@ -333,21 +404,29 @@ main {
   }
 
   .masthead h1 {
-    font-size: 2.75rem;
+    font-size: clamp(2.75rem, 13vw, 3.5rem);
     white-space: normal;
   }
 
-  .masthead-links {
+  .masthead {
+    min-height: 36vh;
+    padding: 2rem 0 2.5rem;
+  }
+
+  .bio {
+    font-size: 1.125rem;
+  }
+
+  .hero-meta {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .contact-links {
     flex-wrap: wrap;
-    row-gap: 0.25rem;
-    white-space: normal;
+    gap: 0.5rem;
   }
-
-  /* Drop the inter-item divider on mobile so a wrapped link
-     doesn't carry an orphan "|" onto the next row. */
-  .masthead-links li + li { border-left: 0; }
-  .masthead-links li { padding: 0 0.6rem 0 0; }
-  .masthead-links li:last-child { padding-right: 0; }
 
   .project {
     grid-template-columns: minmax(0, 1fr);
@@ -356,16 +435,19 @@ main {
   }
 
   .project-date {
-    grid-column: 1;
-    grid-row: 2;
-    margin-top: 0.2rem;
-    text-align: left;
+    margin-top: 0.25rem;
   }
 
   .project-body {
     grid-column: 1;
-    grid-row: 3;
+    grid-row: 2;
     max-width: 100%;
+  }
+
+  .project-heading-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.2rem;
   }
 
   /* Comfortable touch targets */
@@ -381,10 +463,18 @@ main {
   }
 
   .read-more {
-    margin: 0.6rem 0 0.2rem;
+    margin: 0.75rem 0 0.2rem;
   }
 
-  .masthead-links a,
+  .contact-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    border-bottom: 0;
+    text-decoration: none;
+  }
+
   .artifact-item a {
     display: inline-flex;
     align-items: center;
@@ -399,7 +489,7 @@ main {
    Project detail page
 --------------------------------------------------------------------------- */
 .project-nav {
-  margin-bottom: 1.75rem;
+  margin-bottom: 2.5rem;
 }
 
 .back-link {
@@ -422,11 +512,11 @@ main {
 
 .project-detail-header h1 {
   font-family: var(--serif-display);
-  font-weight: 700;
+  font-weight: 400;
   font-size: var(--size-display);
   letter-spacing: -0.015em;
   line-height: 1;
-  margin: 0 0 0.4rem;
+  margin: 0 0 0.75rem;
   color: var(--ink);
 }
 
@@ -450,7 +540,7 @@ main {
   max-width: 48rem;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 1.2rem;
 }
 
 .prose-p {
@@ -486,7 +576,7 @@ main {
 .prose-subhead {
   font-family: var(--serif-display);
   font-size: var(--size-section);
-  font-weight: 700;
+  font-weight: 400;
   color: var(--ink);
   margin: 0 0 0.25rem;
   line-height: 1.15;
@@ -513,7 +603,7 @@ main {
 .decisions-list {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
   max-width: 48rem;
 }
 
@@ -535,7 +625,7 @@ main {
 
 .decision-heading {
   font-family: var(--serif-display);
-  font-weight: 700;
+  font-weight: 400;
   font-size: var(--size-section);
   margin: 0 0 0.3rem;
   color: var(--ink);
