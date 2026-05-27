@@ -34,6 +34,7 @@ window.SITE = {
       tag:      "Tool Execution Environments",
       slug:     "substrate",
       body:     "Rust-based tool execution substrate that separates an agent's control layer from execution, so tool implementations don't have to be rebuilt per language and product.",
+      stack:    ["Rust", "Python SDK", "TypeScript SDK"],
       date:     "May 2026",
       datetime: "2026-05",
       detail: {
@@ -112,6 +113,7 @@ async function main() {
       tag:      "Synthetic data",
       slug:     "genie",
       body:     "Opinionated data generation workflow based on the adversarial revision + LLM-as-Judge pattern, which aids in reducing common quality issues in synthetic data.",
+      stack:    ["Python", "LLM-as-Judge", "Adversarial revision"],
       date:     "Apr 2026",
       datetime: "2026-04",
       detail: {
@@ -155,6 +157,7 @@ async function main() {
       tag:      "Agent Experimentation",
       slug:     "bucephalus",
       body:     "Rust-based experiment harness designed around the idea that experiments will need to be long-lived, agent-driven, and support a variety of shapes.",
+      stack:    ["Rust", "Modal sandboxes", "SQLite", "R2"],
       date:     "Dec 2025",
       datetime: "2025-12",
       detail: {
@@ -225,6 +228,7 @@ async function main() {
       tag:      "Agent harness",
       slug:     "nova",
       body:     "Model-agnostic harness for orchestrating filesystem agents and subagents.",
+      stack:    ["TypeScript", "Terminal UI", "Agent tracing"],
       date:     "Oct 2025",
       datetime: "2025-10",
       detail: {

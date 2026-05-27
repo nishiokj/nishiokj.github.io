@@ -7,19 +7,21 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main>
+  <main class="project-detail-main">
     <nav class="project-nav">
       <a href="index.html" class="back-link">← Jevin Nishioka</a>
     </nav>
 
     <header class="project-detail-header">
       <h1 data-title></h1>
-      <time class="project-detail-date" data-date></time>
     </header>
 
-    <hr class="rule" />
-
     <p class="project-lede" data-body></p>
+    <ul class="project-stack project-detail-stack" hidden data-stack></ul>
+    <div class="project-detail-meta">
+      <time class="project-detail-date" data-date></time>
+      <a class="project-detail-github" href="#" target="_blank" rel="noopener" hidden data-github>GitHub</a>
+    </div>
 
     <hr class="rule" hidden data-why-rule />
 
@@ -70,12 +72,6 @@
       <div class="prose-blocks" data-other-experiments></div>
     </section>
 
-    <hr class="rule" />
-
-    <section>
-      <h2 class="section-label">Link to GitHub</h2>
-      <ul class="artifacts-list" data-artifacts></ul>
-    </section>
   </main>
 
   <script src="content.js"></script>
