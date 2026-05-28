@@ -25,7 +25,7 @@
       "title": "Substrate",
       "tag": "Tool Execution Environments",
       "slug": "substrate",
-      "body": "Rust-based tool execution substrate that separates an agent's control layer from execution, so tool implementations don't have to be rebuilt per language and product.",
+      "body": "Portable tool execution service that reduces the burden on agent applications by managing environment complexity and eliminating repetitive tool implementation",
       "stack": [
         "Rust"
       ],
@@ -77,7 +77,7 @@
       "title": "Genie",
       "tag": "Benchmark Case Quality",
       "slug": "genie",
-      "body": "Opinionated benchmark-case workflow based on adversarial revision and LLM-as-Judge review, aimed at selecting cases with real diagnostic pressure instead of polished-looking noise.",
+      "body": "Synthetic data workflow leveraging Adversarial Revision and LLM-as-Judge patterns which improve final output quality",
       "stack": [
         "Python",
         "LangGraph",
@@ -129,7 +129,7 @@
       "title": "Bucephalus",
       "tag": "Agent Experimentation",
       "slug": "bucephalus",
-      "body": "Rust-based experiment harness designed around the idea that experiments will need to be long-lived, agent-driven, and support a variety of shapes.",
+      "body": "Control-plane infrastructure for long-running jobs requiring per-task isolation such as benchmarks, evals, regression tests and general experiments",
       "stack": [
         "Rust",
         "Postgres",
@@ -163,15 +163,15 @@
           },
           {
             "heading": "Stages, Ephemerals, Externals",
-            "body": "Bucephalus models top-level YAML resource declarations as three primitives: Stages, Ephemerals, and Externals. The distinction is whether the runner wires the resource into the trial, owns its lifecycle, or simply records that the trial crossed an external boundary. A Stage is a link in the chain — transport is ours. An Ephemeral runs off the chain, but the runner still owns its lifecycle: sidecars, MCP servers, memory systems, spun up for the trial and torn down with it. An External is off the chain and outside our jurisdiction entirely — network egress, credentials, third-party APIs; declaring them is what gives you hard accounting of everything that crossed the boundary. So the test is two questions: is it a link we wired? Then it's a Stage. If not, do we own its lifecycle? Ephemeral if yes, External if no. The workspace itself is none of the three — not machinery, but the subject the machinery acts on. The Transport Envelope is the uniform shape that keeps all of this declarative even as the things at the boundary diverge."
+            "body": "The intuition for these primitives lies in the categorization of resources as you declare them in the YAML. It follows a simple flow: Is the lifecycle of this resource NOT owned within the experiment itself? It's an external. Think a persistent database or third party API, we do not materialize these nor take them down. Is Bucephalus responsible for transporting data into and out of this? It's a stage. Think your agent application, or a grader script. The agent app needs to be passed a case in order to handle it, and the grader script needs the result of the agent application in order to run. If for some reason you agent application called a grader script running on a 3rd party server, the grader would not be a stage. Finally, if the lifecycle is owned by Bucephalus, but the transport is NOT, it is an Ephemeral. Think an MCP server, sidecar or mocked temporary database."
           },
           {
-            "heading": "Declarative configuration",
+            "heading": "Declaring experiments in YAML",
             "body": "I think this provides the correct surface for the idea that many experiments will need to be run. Going back to \"how do I verify this large piece of content\", being able to look at a single YAML file and understand what existed during that experiment and where the metrics came from really helps provide context for the results."
           },
           {
-            "heading": "Heavy pre-flight checks and Recoverability",
-            "body": "One of the key aspects of the runner is that experiments can be paused, resumed, and recovered, because they need to run for long periods of time. I set up a sophisticated tiering of smoke tests and linting into the harness, so that by the time you launch a full run you have high confidence in at least mechanical viability."
+            "heading": "Fail as early as possible",
+            "body": "The tail case I designed around was one where you launch an experiment, come back in 4 hours and realize every agent got 100% on SWEBench. Your good pal Codex then tells you that it 'injected a custom grader script' that returned a passing grade for every input because 'We needed a smoke test'. Needless to say, I decided we DO need to smoke test, but it was going to be a single shot that fails quickly and loudly. I also implemented pre-flight checks for catching mechanical bugs. "
           }
         ],
         "demo": null,
@@ -187,7 +187,7 @@
       "title": "Nova",
       "tag": "Agent harness",
       "slug": "nova",
-      "body": "Model-agnostic harness for orchestrating filesystem agents and subagents.",
+      "body": "Model-agnostic agent runtime that manages long context, provides tracing, tools and event streaming. Has RAG-based memory system, a trace viewer and cron job scheduler as additional plugins",
       "stack": [
         "TypeScript",
         "Bun",
@@ -213,7 +213,7 @@
             "type": "image",
             "src": "nova-monitor.png",
             "alt": "Nova agent monitor showing an active run with execution flow, tool calls, token counts, and touched files.",
-            "note": "This is the trace viewer I built. Very helpful, maybe a bit heavy but I may as well put my 64GB of RAM to work."
+            "note": "This is the trace viewer I built. A bit heavy, but I may as well put my 64GB of RAM to work."
           }
         ],
         "demoLabel": "Screenshots",
