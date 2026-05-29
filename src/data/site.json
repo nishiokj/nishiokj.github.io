@@ -1,10 +1,10 @@
 {
   "name": "Jevin Nishioka",
   "bio": [
-    "I build high-throughput systems for regulated, data-heavy environments. At two Fortune 50 companies, I have delivered high-uptime user services that handle millions of requests per day."
+    "SWE at Deloitte. I build high-throughput systems for regulated, data-heavy environments. At two Fortune 50 companies, I have delivered high-uptime user services that handle millions of requests per day."
   ],
   "projectsIntro": [
-    "My current independent work focuses on verification infrastructure for agent-generated content: how to evaluate, constrain, and trust large volumes of AI-produced outputs before they reach users or systems."
+    "Currently, I am building open source tooling and infrastructure for accelerating agent deployments."
   ],
   "links": [
     {
