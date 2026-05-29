@@ -33,18 +33,21 @@
       "datetime": "2026-05",
       "detail": {
         "why": [
-          "This project is primarily about separating tool execution from an agent application. This buys three things I find important: First, you do not have to redefine and reimplement tools for every language or project. Second, you can separate control state from environment state. Third, you can separate the environment lifecycle from the application lifecycle. Take a LangGraph pipeline, for example. A PipelineState object gets passed from stage to stage, carrying the data needed to route through the graph. That is a clean way to model control state, especially when different agents have different roles and should be used under different conditions. The issue shows up when the agents' work becomes more complex. If an agent produces 8,000 tokens of JSON that is really supposed to represent three files, should that be serialized into PipelineState and passed to the next node? My answer is no: the environment state, or a filesystem in this case, is different from the pipeline's control state. PipelineState does not need to hold the entire filesystem; it can simply hold the data required to route through the graph. This separation becomes more obvious in use cases where a pipeline is running against an environment that already exists, or against resources whose lifecycle should not be owned by the application. The filesystem, credentials, sandboxes, sidecars, and other resources may need to be created, reused, persisted, or torn down independently of any one graph run. Those resources should live in a separate environment, with its own lifecycle. This allows the pipeline to scale independently without needing to worry much about the actual underlying resources."
+          "Take a LangGraph pipeline, for example. A PipelineState object gets passed from stage to stage, carrying the data needed to route through the graph. That is a clean way to model control state, especially when different agents have different roles and should be used under different conditions. The issue shows up when the agents' work becomes more complex. If an agent produces 8,000 tokens of JSON that is really supposed to represent three files, should that be serialized into PipelineState and passed to the next node? My answer is no: the environment state, or a filesystem in this case, is different from the pipeline's control state. PipelineState does not need to hold the entire filesystem; it can simply hold the data required to route through the graph. This separation becomes more obvious in use cases where a pipeline is running against an environment that already exists, or against resources whose lifecycle should not be owned by the application. The filesystem, credentials, sandboxes, sidecars, and other resources may need to be created, reused, persisted, or torn down independently of any one graph run. Those resources should live in a separate environment, with its own lifecycle. This allows the pipeline to scale independently without needing to worry much about the actual underlying resources."
         ],
         "what": {
-          "label": "Design",
-          "intro": [],
+          "label": "",
+          "intro": [
+            {
+              "html": "This project is primarily about separating tool execution from an agent application. This buys three things I find important: First, you do not have to redefine and reimplement tools for every language or project. Second, you can separate control state from environment state. Third, you can separate the environment lifecycle from the application lifecycle."
+            }
+          ],
           "diagram": {
             "src": "projects/substrate/architecture.svg",
             "alt": "Substrate architecture — an agent app issues a tool call through a language SDK, which is routed either as a direct call or through a broker to a worker; both reach the Substrate server, which consults a policy and workspace resolver and is backed by stores for sessions, a sandbox, an effect ledger, and artifacts.",
             "caption": "A tool call's path — the agent app calls in through a language SDK, gets routed directly or through the broker to a worker, and the Substrate server runs it against a resolved policy and workspace, persisting sessions, a sandbox, an effect ledger, and artifacts."
           }
         },
-      
         "samplesLabel": "Code snippets",
         "samples": [
           {
@@ -143,7 +146,7 @@
           "label": "",
           "intro": [
             {
-              "html": "Here is an example of a single-trial invocation of an experiment that includes the benchmark's grading script in the trial container and runs the trial on <a href=\"https://modal.com/products/sandboxes\" target=\"_blank\" rel=\"noopener\">Modal sandboxes</a>."
+              "html": "This is an example of an 'experiment'. More specifically, this is a single trial of the SWEBench benchmark. Bucephalus is running locally on my computer, with the trial running remotely on <a href=\"https://modal.com/products/sandboxes\" target=\"_blank\" rel=\"noopener\">Modal sandboxes</a>."
             }
           ],
           "diagram": {
@@ -192,6 +195,15 @@
       "date": "Oct 2025",
       "datetime": "2025-10",
       "detail": {
+        "what": {
+          "label": "Architecture",
+          "intro": [],
+          "diagram": {
+            "src": "projects/nova/arch.svg",
+            "alt": "Nova architecture diagram showing the client, RPC server, command gateway, harness, event bus, orchestrator, agent, tool registry, subscribers, SQLite, model providers, and Substrate filesystem integration.",
+            "caption": "Nova architecture — client commands flow through the RPC server and gateway into the harness, while the orchestrator, agent, tool registry, event bus, subscribers, SQLite, model providers, and Substrate-backed filesystem coordinate a run."
+          }
+        },
         "why": [
           "You could be reading this and wondering, \"What does this do that Claude Code, Codex, OpenClaw, etc. doesn't?\" The answer is nothing. Or nothing really of note. I started this project all the way back in fall 2025, pre-OpenClaw and when Codex was mud and sticks.",
           "Nova started as a voice agent on a Raspberry Pi, which I moved away from after I ported it from Python to TypeScript and did not want to mess with a new VAD/beamforming package.",

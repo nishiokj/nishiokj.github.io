@@ -889,10 +889,16 @@ main {
   max-width: 24rem;
 }
 
-/* What it is — a standalone architecture diagram. Capped at the same
-   width as the diagram in .what-figure-row so both render at one scale. */
+/* What it is — a standalone architecture diagram. Breaks out of the 48rem
+   text column to use the full content width so dense diagrams (e.g. Nova)
+   render legibly instead of being scaled down into a fixed column. */
 .arch-diagram {
-  max-width: 24rem;
+  max-width: 100%;
+  margin-top: 1.5rem;
+}
+
+.arch-diagram .chart img {
+  max-width: 100%;
 }
 
 /* Placeholder boxes */

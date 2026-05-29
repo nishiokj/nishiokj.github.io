@@ -1,0 +1,65 @@
+%%{init: {
+  "look": "handDrawn",
+  "theme": "base",
+  "flowchart": { "nodeSpacing": 25, "rankSpacing": 25 },
+  "themeVariables": {
+    "fontFamily": "Charter, Georgia, serif",
+    "primaryColor": "#F6F1E6",
+    "primaryBorderColor": "#1B1B1F",
+    "primaryTextColor": "#1B1B1F",
+    "lineColor": "#1B1B1F",
+    "textColor": "#1B1B1F",
+    "clusterBkg": "#E3DBC9",
+    "clusterBorder": "#1B1B1F",
+    "edgeLabelBackground": "#F6F1E6"
+  }
+}}%%
+flowchart TB
+  client["Client<br/>(TUI, SDK, CLI)"]
+
+  subgraph ingress[" "]
+    rpc["RPC Server"]
+    gateway["Command Gateway"]
+    harness["Harness"]
+  end
+
+  subgraph loop[" "]
+    orchestrator["Orchestrator<br/>loop-until-goal governor"]
+    agent["Agent"]
+    registry["ToolRegistry"]
+  end
+
+  subgraph events[" "]
+    bus["Event Bus<br/>pub / sub"]
+    session["Session Subscriber"]
+    trace["Trace Subscriber"]
+    log["Log Subscriber"]
+    db[("SQLite")]
+  end
+
+  providers["OpenAI<br/>Anthropic<br/>Google<br/>Any inference server"]
+  fs["Substrate<br/>(Filesystem)"]
+
+  client -->|"1"| rpc
+  rpc -->|"2"| gateway
+  gateway -->|"3"| harness
+  harness -->|"4"| orchestrator
+  orchestrator -->|"5"| agent
+  agent --> registry
+  registry -->|"6"| fs
+  agent --> providers
+  rpc -->|"7"| client
+
+  orchestrator -.->|"emit event"| bus
+  agent -.->|"emit event"| bus
+  registry -.->|"emit event"| bus
+  bus -.->|"event publish"| session
+  bus -.->|"event publish"| trace
+  bus -.->|"event publish"| log
+  bus -.-> rpc
+
+  session --> db
+  trace --> db
+  log --> db
+
+  linkStyle 0,1,2,3,4,6,8 color:#A6342B

@@ -50,16 +50,6 @@ const githubLink = detail.artifacts?.find((artifact) => /github\.com/i.test(arti
     )}
   </div>
 
-  {detail.why?.length > 0 && (
-    <>
-      <hr class="rule" />
-      <section>
-        <h2 class="section-label">Why I built this</h2>
-        <div class="prose-blocks" set:html={renderProseBlocks(detail.why)} />
-      </section>
-    </>
-  )}
-
   {hasWhat && (
     <>
       <hr class="rule" />
@@ -67,29 +57,39 @@ const githubLink = detail.artifacts?.find((artifact) => /github\.com/i.test(arti
         {detail.what.label !== "" && detail.what.label !== false && (
           <h2 class="section-label">{detail.what.label || "What it is"}</h2>
         )}
-        <div class="prose-blocks">
-          {detail.what.intro?.length > 0 && <Fragment set:html={renderProseBlocks(detail.what.intro)} />}
-          {(detail.what.yaml || detail.what.diagram) && (
-            detail.what.yaml ? (
-              <div class="what-figure-row">
-                <pre class="arch-yaml"><code>{detail.what.yaml}</code></pre>
-                {detail.what.diagram && (
-                  <figure class="chart">
-                    <img src={assetPath(detail.what.diagram.src)} alt={detail.what.diagram.alt || "Architecture diagram"} />
-                    {detail.what.diagram.caption && <figcaption class="chart-caption">{detail.what.diagram.caption}</figcaption>}
-                  </figure>
-                )}
-              </div>
-            ) : (
-              <div class="arch-diagram">
+        {detail.what.intro?.length > 0 && (
+          <div class="prose-blocks"><Fragment set:html={renderProseBlocks(detail.what.intro)} /></div>
+        )}
+        {(detail.what.yaml || detail.what.diagram) && (
+          detail.what.yaml ? (
+            <div class="what-figure-row">
+              <pre class="arch-yaml"><code>{detail.what.yaml}</code></pre>
+              {detail.what.diagram && (
                 <figure class="chart">
                   <img src={assetPath(detail.what.diagram.src)} alt={detail.what.diagram.alt || "Architecture diagram"} />
                   {detail.what.diagram.caption && <figcaption class="chart-caption">{detail.what.diagram.caption}</figcaption>}
                 </figure>
-              </div>
-            )
-          )}
-        </div>
+              )}
+            </div>
+          ) : (
+            <div class="arch-diagram">
+              <figure class="chart">
+                <img src={assetPath(detail.what.diagram.src)} alt={detail.what.diagram.alt || "Architecture diagram"} />
+                {detail.what.diagram.caption && <figcaption class="chart-caption">{detail.what.diagram.caption}</figcaption>}
+              </figure>
+            </div>
+          )
+        )}
+      </section>
+    </>
+  )}
+
+  {detail.why?.length > 0 && (
+    <>
+      <hr class="rule" />
+      <section>
+        <h2 class="section-label">Why I built this</h2>
+        <div class="prose-blocks" set:html={renderProseBlocks(detail.why)} />
       </section>
     </>
   )}
