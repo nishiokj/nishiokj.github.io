@@ -1,10 +1,10 @@
 {
   "name": "Jevin Nishioka",
   "bio": [
-    "I build high-throughput systems for regulated, data-heavy environments. At two Fortune 50 companies, I’ve owned user services, CDC pipelines, and middleware handling hundreds of millions of PII-bearing requests per month."
+    "I build high-throughput systems for regulated, data-heavy environments. At two Fortune 50 companies, I have delivered high-uptime user services that handle millions of requests per day."
   ],
   "projectsIntro": [
-    "I build high-throughput systems for regulated, data-heavy environments. At two Fortune 50 companies, I have delivered high-uptime user services that handle millions of requests per day."
+    "My current independent work focuses on verification infrastructure for agent-generated content: how to evaluate, constrain, and trust large volumes of AI-produced outputs before they reach users or systems."
   ],
   "links": [
     {
@@ -44,12 +44,7 @@
             "caption": "A tool call's path — the agent app calls in through a language SDK, gets routed directly or through the broker to a worker, and the Substrate server runs it against a resolved policy and workspace, persisting sessions, a sandbox, an effect ledger, and artifacts."
           }
         },
-        "decisions": [
-          {
-            "heading": "Permissions scoped close to execution",
-            "body": "I kept permissions resource- and session-scoped close to the actual execution layer, and restricted the tool set in v1 before forming a hard opinion on the sandboxing/isolation concerns that arise with more sophisticated tools."
-          }
-        ],
+      
         "samplesLabel": "Code snippets",
         "samples": [
           {
@@ -140,8 +135,9 @@
       "datetime": "2025-12",
       "detail": {
         "why": [
-          "I believe that we will continue to want to answer \"What do I make of this huge pile of code? Which model performs best for my use case in production?\" and this becomes disproportionately harder as we scale what we're examining. Although, this may not be true forever. As agents become increasingly competent at long-horizon decision-making, forecasting, and acting rationally, we should ask less, \"Is this patch good?\" and observe more, \"Which agent is making the most money in our simulated marketplace?\" or \"How accurately does the agent predict the Mayor of Topeka in 1908 using newspaper clippings from the year leading up to the election?\" This, of course, leads to a different class of problems, but even these are experiments.",
-          "I think process-shaped systems in enterprises are quite ripe, because existing systems already provide evals, KPIs, and a lot of the hardest epistemic infrastructure. By providing a solid bar to measure against, this contextualizes results, especially if you can reuse actual production inputs. I think it is very important to leverage this. Any mechanism that reveals trusted information about a body of work an agent performed is increasingly valuable. This is why things like Karpathy's autoresearch work so well: the agent gets feedback from its actions that is relatively unfalsifiable."
+          "My initial reason for building this was not why I continue to today. Initially, I wanted to simply run my filesystem agent, Nova, against popular benchmarks. Today, I continue to build this because the problems emerging with agents I believe to be structural. PR review, test generation, benchmark design, LLM-as-a-Judge can all be abstracted into 'constructing trustworthy judgments over high-dimensional machine-generated work.' This grows superlinearly with the size of the surface area. This leads to why I like the term 'Experiments'. An experiment implies some level of rigor before allowing you to take your work at face value. While the scientific method won't materialize a universal oracle and save the day, ensuring your pipettes are clean, you're isolating your variables and you've accounted for everything going into the test tube is a good start.",
+          "As agents become increasingly competent at long-horizon decision-making, forecasting, and acting rationally, we should ask less, \"Is this patch good?\" and observe more, \"Which agent is making the most money in our simulated marketplace?\" or \"How accurately does the agent predict the Mayor of Topeka in 1908 using newspaper clippings from the year leading up to the election?\" This, of course, leads to a different class of problems, but even these are experiments.",
+          "I think process-shaped systems in enterprises are quite ripe. The industry is already moving in this direction. There are already a million startups that are automating invoices, claims processing and returns. By leveraging the historical corpus you get the hard part for 'cheap'. I think it is very important to leverage this. Any mechanism that reveals trusted information about a body of work an agent performed is increasingly valuable. This is why things like Karpathy's autoresearch work so well: the agent gets feedback from its actions that is relatively unfalsifiable."
         ],
         "what": {
           "label": "",

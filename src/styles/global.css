@@ -255,7 +255,7 @@ main {
 .project-stack {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: 0.32rem;
   list-style: none;
   margin: 0 0 0.85rem;
   padding: 0;
@@ -264,20 +264,19 @@ main {
 .project-stack li {
   background: rgba(232, 230, 225, 0.62);
   border: 1px solid rgba(227, 219, 201, 0.65);
-  border-radius: 0.3rem;
+  border-radius: 0.24rem;
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: 0.66rem;
   line-height: 1;
-  letter-spacing: 0.06em;
-  padding: 0.32rem 0.45rem 0.34rem;
+  letter-spacing: 0.05em;
+  padding: 0.23rem 0.35rem 0.25rem;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
 .read-more {
-  display: block;
-  width: fit-content;
-  margin: 1rem 0 0;
+  display: inline;
+  margin-left: 0.35rem;
   font-size: var(--size-caption);
   font-family: var(--sans-body);
   font-weight: 400;
@@ -481,16 +480,6 @@ main {
     padding: 0.4rem 0;
   }
 
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.75rem;
-  }
-
-  .read-more {
-    margin: 0.75rem 0 0.2rem;
-  }
-
   .contact-links a {
     display: inline-flex;
     align-items: center;
@@ -519,23 +508,43 @@ main {
   padding-right: clamp(7rem, 12vw, 12rem);
 }
 
-.project-nav {
+.breadcrumb {
   margin-bottom: 2.5rem;
 }
 
-.back-link {
+.breadcrumb ol {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumb li {
   font-size: var(--size-caption);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--muted);
+}
+
+.breadcrumb li:not(:last-child)::after {
+  content: "/";
+  margin-left: 0.45rem;
+  color: rgba(95, 90, 80, 0.45);
+}
+
+.breadcrumb a {
+  color: inherit;
   text-decoration: none;
   border-bottom: 1px solid transparent;
   padding-bottom: 0.08rem;
   transition: color 120ms ease, border-color 120ms ease;
 }
 
-.back-link:hover,
-.back-link:focus-visible {
+.breadcrumb a:hover,
+.breadcrumb a:focus-visible {
   color: var(--accent);
   border-bottom-color: var(--accent);
   outline: none;

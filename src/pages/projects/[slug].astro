@@ -23,8 +23,11 @@ const githubLink = detail.artifacts?.find((artifact) => /github\.com/i.test(arti
 ---
 
 <BaseLayout title={title} description={project.body} mainClass="project-detail-main">
-  <nav class="project-nav">
-    <a href="/" class="back-link">&lt;- {site.name}</a>
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li aria-current="page">{project.title}</li>
+    </ol>
   </nav>
 
   <header class="project-detail-header">

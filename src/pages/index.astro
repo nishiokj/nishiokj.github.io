@@ -35,7 +35,7 @@ import { assetPath, formatProjectDate, linkIcon, nbsp, renderInlineBlock } from 
 
   <hr class="rule" />
 
-  <section class="work">
+  <section class="work" id="projects">
     <h2 class="work-heading">Projects</h2>
     {site.projectsIntro?.length > 0 && (
       <div class="projects-intro">
@@ -70,8 +70,10 @@ import { assetPath, formatProjectDate, linkIcon, nbsp, renderInlineBlock } from 
               </div>
             </dt>
             <dd class="project-body">
-              <p class="project-summary">{project.body}</p>
-              {project.slug && <a href={`/projects/${project.slug}/`} class="read-more">Technical writeup -&gt;</a>}
+              <p class="project-summary">
+                {project.body}
+                {project.slug && <a href={`/projects/${project.slug}/`} class="read-more">Technical write-up &gt;</a>}
+              </p>
             </dd>
           </div>
         );
