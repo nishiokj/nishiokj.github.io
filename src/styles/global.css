@@ -453,11 +453,6 @@ main {
     overflow-x: hidden;
   }
 
-  .project-detail-main {
-    padding-left: var(--gutter);
-    padding-right: var(--gutter);
-  }
-
   .masthead h1 {
     font-size: clamp(2.75rem, 13vw, 3.5rem);
     white-space: normal;
