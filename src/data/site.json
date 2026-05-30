@@ -35,13 +35,18 @@
       "datetime": "2026-05",
       "detail": {
         "why": [
-          "Take a LangGraph pipeline, for example. A PipelineState object gets passed from stage to stage, carrying the data needed to route through the graph. That is a clean way to model control state, especially when different agents have different roles and should be used under different conditions. The issue shows up when the agents' work becomes more complex. If an agent produces 8,000 tokens of JSON that is really supposed to represent three files, should that be serialized into PipelineState and passed to the next node? My answer is no: the environment state, or a filesystem in this case, is different from the pipeline's control state. PipelineState does not need to hold the entire filesystem; it can simply hold the data required to route through the graph. This separation becomes more obvious in use cases where a pipeline is running against an environment that already exists, or against resources whose lifecycle should not be owned by the application. The filesystem, credentials, sandboxes, sidecars, and other resources may need to be created, reused, persisted, or torn down independently of any one graph run. Those resources should live in a separate environment, with its own lifecycle. This allows the pipeline to scale independently without needing to worry much about the actual underlying resources."
+          {
+            "html": "This project is primarily about separating tool execution from an agent application. This buys three things I find important: First, you do not have to redefine and reimplement tools for every language or project. Second, you can separate application control state from environment state. Third, you can separate the application lifecycle from the environment lifecycle. The tried and true metaphor for this concept makes it a bit more clear: "
+          },
+          {
+            "html": "A waiter carries your order back to the kitchen, but they don't cook it at your table, and they don't drag the stove, the pantry, and the half-finished sauces out into the dining room. They hold only the order ticket, table four, salmon. That is the control state, it routes the waiter. The kitchen holds everything else: the ingredients, the equipment, the mise en place that took all morning to set up. Substrate is a kitchen that cooks every dish instantly, and can be dropped in the new restaurant you're opening tomorrow that is a completely different cousine with a waitstaff that rides around on unicycles."
+          }
         ],
         "what": {
           "label": "",
           "intro": [
             {
-              "html": "This project is primarily about separating tool execution from an agent application. This buys three things I find important: First, you do not have to redefine and reimplement tools for every language or project. Second, you can separate control state from environment state. Third, you can separate the environment lifecycle from the application lifecycle."
+              "html": "Substrate is an environment like a filesystem, with a worker that reads from an agent application in the background. It then takes the tool call events and applies them against the filesystem. Intuitively, you may think the worker is “intercepting” these tool calls."
             }
           ],
           "diagram": {
@@ -140,7 +145,8 @@
       "datetime": "2025-12",
       "detail": {
         "why": [
-          "My initial reason for building this was not why I continue to today. Initially, I wanted to simply run my filesystem agent, Nova, against popular benchmarks. Today, I continue to build on Bucephalus because there are several problems emerging with LLM generated content that are related. The issue is that LLM's generate an amount of code that was previously impossible. When your agent writes five thousand lines of code, how can you even begin to review it? An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2 jet. Not to mention, we need to assume the B-2 was assembled by another orangutan who was following a markdown file that described how a jet should be built by a guy who has never built one. The same exact issue applies directly to creating your own benchmarks, where does ground truth reside? Even if you want to use a proven benchmark, how can you even trust the results? Many open source benchmark questions have been used as training data! Agents have been caught going through git history to cheat on high profile benchmarks people still cite. This leads to why I like the term 'Experiments'. An experiment implies some level of rigor before allowing you to trust your results. While the scientific method won't materialize a universal ground truth oracle and save the day, ensuring your pipettes are clean, you're isolating your variables and your lab rat has not been trained on your maze is a good foundation."        ],
+          "My initial reason for building this was not why I continue to today. Initially, I wanted to simply run my filesystem agent, Nova, against popular benchmarks. Today, I continue to build on Bucephalus because there are several problems emerging with LLM generated content that are related. The issue is that LLM's generate an amount of code that was previously impossible. When your agent writes five thousand lines of code, how can you even begin to review it? An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2 jet. Not to mention, we need to assume the B-2 was assembled by another orangutan who was following a markdown file that described how a jet should be built by a guy who has never built one. The same exact issue applies directly to creating your own benchmarks, where does ground truth reside? Even if you want to use a proven benchmark, how can you even trust the results? Many open source benchmark questions have been used as training data! Agents have been caught going through git history to cheat on high profile benchmarks people still cite. This leads to why I like the term 'Experiments'. An experiment implies some level of rigor before allowing you to trust your results. While the scientific method won't materialize a universal ground truth oracle and save the day, ensuring your pipettes are clean, you're isolating your variables and your lab rat has not been trained on your maze is a good foundation."
+        ],
         "what": {
           "label": "",
           "intro": [
@@ -165,7 +171,7 @@
           },
           {
             "heading": "Declaring experiments in YAML",
-            "body":   "The reason I like this approach is going back to the \"labratory\" metaphor. YAML is great because you declare what you need, and thus if you have an agent run an experiment for you, you can review the YAML and have a decent understanding of what that experiment was made up of, which is a good proxy for rigor."
+            "body": "The reason I like this approach is going back to the \"labratory\" metaphor. YAML is great because you declare what you need, and thus if you have an agent run an experiment for you, you can review the YAML and have a decent understanding of what that experiment was made up of, which is a good proxy for rigor."
           },
           {
             "heading": "Fail as early as possible",

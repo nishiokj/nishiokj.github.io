@@ -14,17 +14,12 @@
   }
 }}%%
 flowchart TB
-  agent["Agent app"]
-
-  subgraph iface[" "]
-    sdk["SDKs"]
+  subgraph proc["Agent process"]
+    agent["Agent app"]
+    broker[("Substrate Broker")]
   end
 
-  subgraph dispatch[" "]
-    direct["Direct call"]
-    broker[("Broker")]
-    worker["Worker"]
-  end
+  worker["Substrate Worker"]
 
   server["Substrate server"]
   resolver["Policy + workspace<br/>resolver"]
@@ -36,11 +31,9 @@ flowchart TB
     artifacts[("Artifacts")]
   end
 
-  agent -->|"tool call"| sdk
-  sdk --> direct
-  sdk -.-> broker
-  broker --> worker
-  direct --> server
+  agent -->|"tool call"| broker
+  agent -.->|"direct call"| server
+  worker -.->|"listens"| broker
   worker --> server
   server --> resolver
   resolver --> fs
