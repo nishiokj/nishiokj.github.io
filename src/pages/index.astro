@@ -6,31 +6,34 @@ import { assetPath, formatProjectDate, linkIcon, nbsp, renderInlineBlock } from 
 
 <BaseLayout title={site.name}>
   <header class="masthead">
-    <h1>{site.name}</h1>
-    <div class="hero-meta">
-      <p class="hero-title">Software Engineer</p>
-      <ul class="links contact-links">
-        {site.links.map((link) => {
-          const external = /^https?:/i.test(link.href);
-          const icon = linkIcon(link);
-          return (
-            <li>
-              <a href={link.href} aria-label={link.label} target={external ? "_blank" : undefined} rel={external ? "noopener me" : undefined}>
-                {icon ? (
-                  <>
-                    <img src={icon} alt="" aria-hidden="true" />
-                    <span class="sr-only">{link.label}</span>
-                  </>
-                ) : link.label}
-              </a>
-            </li>
-          );
-        })}
-      </ul>
+    <div class="masthead-intro">
+      <h1>{site.name}</h1>
+      <div class="hero-meta">
+        <p class="hero-title">Software Engineer</p>
+        <ul class="links contact-links">
+          {site.links.map((link) => {
+            const external = /^https?:/i.test(link.href);
+            const icon = linkIcon(link);
+            return (
+              <li>
+                <a href={link.href} aria-label={link.label} target={external ? "_blank" : undefined} rel={external ? "noopener me" : undefined}>
+                  {icon ? (
+                    <>
+                      <img src={icon} alt="" aria-hidden="true" />
+                      <span class="sr-only">{link.label}</span>
+                    </>
+                  ) : link.label}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div class="bio">
+        {site.bio.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
     </div>
-    <div class="bio">
-      {site.bio.map((paragraph) => <p>{paragraph}</p>)}
-    </div>
+    <div class="hero-photo"><img src={assetPath("headshot.jpeg")} alt={site.name} width="280" height="280" /></div>
   </header>
 
   <hr class="rule" />

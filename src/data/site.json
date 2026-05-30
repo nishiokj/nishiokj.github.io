@@ -1,7 +1,9 @@
 {
   "name": "Jevin Nishioka",
   "bio": [
-    "SWE at Deloitte. I build high-throughput systems for regulated, data-heavy environments. At two Fortune 50 companies, I have delivered high-uptime user services that handle millions of requests per day."
+    "SWE at Deloitte. I build distributed backend systems for enterprises.",
+    "At a defense contractor, I'm building an event source spine linking factory-floor systems to enterprise ERP, along with an LLM-powered sync job keeping scattered internal specifications consistent.",
+    "Earlier, I built high-availability, user-facing services for a Fortune 50 brokerage."
   ],
   "projectsIntro": [
     "Currently, I am building open source tooling and infrastructure for accelerating agent deployments."
