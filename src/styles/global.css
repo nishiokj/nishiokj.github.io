@@ -123,7 +123,7 @@ main {
   gap: clamp(2rem, 5vw, 4rem);
   width: 100%;
   min-height: 42vh;
-  padding: 3rem 0 3.5rem;
+  padding: 3rem 0 1.5rem;
 }
 
 .masthead-intro {
@@ -624,19 +624,19 @@ main {
 }
 
 .project-detail-header {
-  margin-bottom: 1.35rem;
+  margin-bottom: 0.6rem;
 }
 
 .project-lede {
   max-width: var(--measure);
-  margin: 0;
+  margin: 0.85rem 0 0;
   font-size: 1rem;
   line-height: 1.6;
 }
 
 .project-detail-stack {
-  margin-top: 1rem;
-  max-width: 48rem;
+  margin-top: 0;
+  max-width: var(--measure);
 }
 
 .project-detail-meta {
@@ -862,6 +862,7 @@ main {
 
 .sample-code {
   margin: 0;
+  max-width: 34rem;
   padding: 0.7rem 0.85rem;
   background: #F6F1E6;
   border: 1px solid var(--ink);

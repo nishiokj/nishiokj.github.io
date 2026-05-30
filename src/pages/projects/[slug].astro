@@ -35,13 +35,13 @@ const sampleBeside = detail.what?.sampleBeside && detail.samples?.length > 0;
   <header class="project-detail-header">
     <h1>{project.title}</h1>
   </header>
-
-  <p class="project-lede">{project.body}</p>
   {project.stack?.length > 0 && (
     <ul class="project-stack project-detail-stack">
       {project.stack.map((item) => <li>{item}</li>)}
     </ul>
   )}
+
+  <p class="project-lede">{project.body}</p>
   <div class="project-detail-meta">
     <time class="project-detail-date" datetime={project.datetime}>{formatProjectDate(project.datetime, project.date, "long")}</time>
     {githubLink && (
