@@ -1,4 +1,37 @@
 /* ---------------------------------------------------------------------------
+   Charter — self-hosted so every visitor sees the same serif, not just
+   Apple devices that ship it as a system font.
+--------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Charter";
+  src: url("/fonts/charter-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Charter";
+  src: url("/fonts/charter-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Charter";
+  src: url("/fonts/charter-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Charter";
+  src: url("/fonts/charter-bolditalic.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ---------------------------------------------------------------------------
    Tokens — pulled from Experiments/tools/charts/brand/tokens.py.
 --------------------------------------------------------------------------- */
 :root {
