@@ -1,7 +1,7 @@
 {
   "name": "Jevin Nishioka",
   "bio": [
-    "SWE at Deloitte. I build distributed backend systems for enterprises.",
+    "SWE at Deloitte. I embed with enterprise clients and build distributed backend systems.",
     "At a defense contractor, I'm building an event source spine linking factory-floor systems to enterprise ERP, along with an LLM-powered sync job keeping scattered internal specifications consistent.",
     "Earlier, I built high-availability, user-facing services for a Fortune 50 brokerage."
   ],
@@ -140,10 +140,7 @@
       "datetime": "2025-12",
       "detail": {
         "why": [
-          "My initial reason for building this was not why I continue to today. Initially, I wanted to simply run my filesystem agent, Nova, against popular benchmarks. Today, I continue to build this because the problems emerging with agents I believe to be structural. PR review, test generation, benchmark design, LLM-as-a-Judge can all be abstracted into 'constructing trustworthy judgments over high-dimensional machine-generated work.' This grows superlinearly with the size of the surface area. This leads to why I like the term 'Experiments'. An experiment implies some level of rigor before allowing you to take your work at face value. While the scientific method won't materialize a universal oracle and save the day, ensuring your pipettes are clean, you're isolating your variables and you've accounted for everything going into the test tube is a good start.",
-          "As agents become increasingly competent at long-horizon decision-making, forecasting, and acting rationally, we should ask less, \"Is this patch good?\" and observe more, \"Which agent is making the most money in our simulated marketplace?\" or \"How accurately does the agent predict the Mayor of Topeka in 1908 using newspaper clippings from the year leading up to the election?\" This, of course, leads to a different class of problems, but even these are experiments.",
-          "I think process-shaped systems in enterprises are quite ripe. The industry is already moving in this direction. There are already a million startups that are automating invoices, claims processing and returns. By leveraging the historical corpus you get the hard part for 'cheap'. I think it is very important to leverage this. Any mechanism that reveals trusted information about a body of work an agent performed is increasingly valuable. This is why things like Karpathy's autoresearch work so well: the agent gets feedback from its actions that is relatively unfalsifiable."
-        ],
+          "My initial reason for building this was not why I continue to today. Initially, I wanted to simply run my filesystem agent, Nova, against popular benchmarks. Today, I continue to build on Bucephalus because there are several problems emerging with LLM generated content that are related. The issue is that LLM's generate an amount of code that was previously impossible. When your agent writes five thousand lines of code, how can you even begin to review it? An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2 jet. Not to mention, we need to assume the B-2 was assembled by another orangutan who was following a markdown file that described how a jet should be built by a guy who has never built one. The same exact issue applies directly to creating your own benchmarks, where does ground truth reside? Even if you want to use a proven benchmark, how can you even trust the results? Many open source benchmark questions have been used as training data! Agents have been caught going through git history to cheat on high profile benchmarks people still cite. This leads to why I like the term 'Experiments'. An experiment implies some level of rigor before allowing you to trust your results. While the scientific method won't materialize a universal ground truth oracle and save the day, ensuring your pipettes are clean, you're isolating your variables and your lab rat has not been trained on your maze is a good foundation."        ],
         "what": {
           "label": "",
           "intro": [
@@ -168,11 +165,11 @@
           },
           {
             "heading": "Declaring experiments in YAML",
-            "body": "I think this provides the correct surface for the idea that many experiments will need to be run. Going back to \"how do I verify this large piece of content\", being able to look at a single YAML file and understand what existed during that experiment and where the metrics came from really helps provide context for the results."
+            "body":   "The reason I like this approach is going back to the \"labratory\" metaphor. YAML is great because you declare what you need, and thus if you have an agent run an experiment for you, you can review the YAML and have a decent understanding of what that experiment was made up of, which is a good proxy for rigor."
           },
           {
             "heading": "Fail as early as possible",
-            "body": "The tail case I designed around was one where you launch an experiment, come back in 4 hours and realize every agent got 100% on SWEBench. Your good pal Codex then tells you that it 'injected a custom grader script' that returned a passing grade for every input because 'We needed a smoke test'. Needless to say, I decided we DO need to smoke test, but it was going to be a single shot that fails quickly and loudly. I also implemented pre-flight checks for catching mechanical bugs. "
+            "body": "I let an experiment run for 4 hours that was failed every single trial because the grader was not receiving the agent's work. Needless to say, waiting a few extra seconds for pre-flight checks and a smoke run seemed like a pretty good deal, so I implemented those."
           }
         ],
         "demo": null,
