@@ -20,7 +20,7 @@
   --size-section: 1.25rem;    /* 20px */
 
   --max:    66rem;
-  --gutter: 9rem;
+  --gutter: 1.5rem;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
