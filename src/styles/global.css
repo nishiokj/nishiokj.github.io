@@ -55,7 +55,7 @@
 
   --max:    66rem;
   --gutter: 1.5rem;
-  --measure: 66ch;  /* reading width for running prose (~66 characters) */
+  --measure: 42rem;  /* reading width for prose (~66ch); fixed so all blocks align regardless of font size */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -101,7 +101,6 @@ main {
   color: var(--ink);
   max-width: var(--measure);
   margin: 0 auto 1.35rem;
-  text-align: center;
 }
 
 /* Hairlines */
@@ -382,7 +381,8 @@ main {
 --------------------------------------------------------------------------- */
 .grid-3 {
   display: grid;
-  grid-template-columns: minmax(0, min(100%, 48rem));
+  grid-template-columns: minmax(0, min(100%, var(--measure)));
+  justify-content: center;
   gap: 1.5rem;
   align-items: start;
 }
@@ -806,7 +806,7 @@ main {
 /* Demo */
 .demo-grid {
   display: grid;
-  grid-template-columns: minmax(0, min(100%, 48rem));
+  grid-template-columns: minmax(0, min(100%, var(--measure)));
   justify-content: center;
   gap: 1.5rem;
   align-items: start;
@@ -1006,8 +1006,8 @@ main {
    text column to use the full content width so dense diagrams (e.g. Nova)
    render legibly instead of being scaled down into a fixed column. */
 .arch-diagram {
-  max-width: 100%;
-  margin-top: 1.5rem;
+  max-width: var(--measure);
+  margin: 1.5rem auto 0;
 }
 
 .arch-diagram .chart {
