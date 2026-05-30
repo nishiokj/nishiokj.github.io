@@ -53,7 +53,8 @@
             "src": "projects/substrate/architecture.svg",
             "alt": "Substrate architecture — an agent app issues a tool call through a language SDK, which is routed either as a direct call or through a broker to a worker; both reach the Substrate server, which consults a policy and workspace resolver and is backed by stores for sessions, a sandbox, an effect ledger, and artifacts.",
             "caption": "A tool call's path — the agent app calls in through a language SDK, gets routed directly or through the broker to a worker, and the Substrate server runs it against a resolved policy and workspace, persisting sessions, a sandbox, an effect ledger, and artifacts."
-          }
+          },
+          "sampleBeside": true
         },
         "samplesLabel": "Code snippets",
         "samples": [

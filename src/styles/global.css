@@ -1018,8 +1018,39 @@ main {
   margin-top: 1.5rem;
 }
 
+.arch-diagram .chart {
+  align-items: center;
+}
+
+/* Diagram and code snippet side by side (e.g. Substrate). Stacks on narrow
+   screens via flex-wrap. */
+.what-split {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.what-split .arch-diagram {
+  flex: 1 1 22rem;
+  min-width: 0;
+  margin-top: 0;
+}
+
+.what-split .samples-list {
+  flex: 1 1 22rem;
+  min-width: 0;
+}
+
+/* Fit the diagram inside the screen: never wider than the column, never
+   taller than the viewport. width:auto lets whichever limit binds win while
+   the aspect ratio is preserved, so it always fits without manual tuning. */
 .arch-diagram .chart img {
+  width: auto;
+  height: auto;
   max-width: 100%;
+  max-height: 82vh;
 }
 
 /* Placeholder boxes */

@@ -1,7 +1,8 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import CodeSamples from "../../components/CodeSamples.astro";
 import site from "../../data/site.json";
-import { assetPath, formatProjectDate, renderCode, renderProseBlocks } from "../../lib/render";
+import { assetPath, formatProjectDate, renderProseBlocks } from "../../lib/render";
 
 export function getStaticPaths() {
   return site.projects
@@ -20,6 +21,7 @@ const defaultSampleIndex = detail.samples
   ? Math.max(0, detail.samples.findIndex((sample) => sample.language === "py"))
   : 0;
 const githubLink = detail.artifacts?.find((artifact) => /github\.com/i.test(artifact.href));
+const sampleBeside = detail.what?.sampleBeside && detail.samples?.length > 0;
 ---
 
 <BaseLayout title={title} description={project.body} mainClass="project-detail-main">
@@ -70,6 +72,16 @@ const githubLink = detail.artifacts?.find((artifact) => /github\.com/i.test(arti
                   {detail.what.diagram.caption && <figcaption class="chart-caption">{detail.what.diagram.caption}</figcaption>}
                 </figure>
               )}
+            </div>
+          ) : sampleBeside ? (
+            <div class="what-split">
+              <div class="arch-diagram">
+                <figure class="chart">
+                  <img src={assetPath(detail.what.diagram.src)} alt={detail.what.diagram.alt || "Architecture diagram"} />
+                  {detail.what.diagram.caption && <figcaption class="chart-caption">{detail.what.diagram.caption}</figcaption>}
+                </figure>
+              </div>
+              <CodeSamples samples={detail.samples} defaultIndex={defaultSampleIndex} />
             </div>
           ) : (
             <div class="arch-diagram">
@@ -137,25 +149,12 @@ const githubLink = detail.artifacts?.find((artifact) => /github\.com/i.test(arti
     </>
   )}
 
-  {detail.samples?.length > 0 && (
+  {detail.samples?.length > 0 && !sampleBeside && (
     <>
       <hr class="rule" />
       <section>
         <h2 class="section-label">{detail.samplesLabel || "Samples"}</h2>
-        <div class="samples-list">
-          <div class="sample-tabs" role="tablist">
-            {detail.samples.map((sample, index) => (
-              <button class:list={["sample-tab", { "is-active": index === defaultSampleIndex }]} type="button" data-sample-tab={index}>
-                {sample.language === "py" ? "Python" : sample.language === "ts" ? "TypeScript" : sample.language}
-              </button>
-            ))}
-          </div>
-          <div class="sample-panels">
-            {detail.samples.map((sample, index) => (
-              <pre class="sample-code" hidden={index !== defaultSampleIndex} data-sample-panel={index}><code set:html={renderCode(sample.code, sample.language)} /></pre>
-            ))}
-          </div>
-        </div>
+        <CodeSamples samples={detail.samples} defaultIndex={defaultSampleIndex} />
       </section>
     </>
   )}

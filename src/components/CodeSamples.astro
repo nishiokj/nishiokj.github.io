@@ -1,0 +1,21 @@
+---
+import { renderCode } from "../lib/render";
+
+const { samples = [], defaultIndex = 0 } = Astro.props;
+const langLabel = (lang) => (lang === "py" ? "Python" : lang === "ts" ? "TypeScript" : lang);
+---
+
+<div class="samples-list">
+  <div class="sample-tabs" role="tablist">
+    {samples.map((sample, index) => (
+      <button class:list={["sample-tab", { "is-active": index === defaultIndex }]} type="button" data-sample-tab={index}>
+        {langLabel(sample.language)}
+      </button>
+    ))}
+  </div>
+  <div class="sample-panels">
+    {samples.map((sample, index) => (
+      <pre class="sample-code" hidden={index !== defaultIndex} data-sample-panel={index}><code set:html={renderCode(sample.code, sample.language)} /></pre>
+    ))}
+  </div>
+</div>
