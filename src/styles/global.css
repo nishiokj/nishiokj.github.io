@@ -890,6 +890,65 @@ main {
   }
 }
 
+/* Performance table */
+.performance-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.performance-table {
+  width: 100%;
+  min-width: 42rem;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+}
+
+.performance-table th,
+.performance-table td {
+  padding: 0.62rem 0.75rem;
+  border-bottom: 1px solid var(--grid);
+  text-align: right;
+  vertical-align: top;
+}
+
+.performance-table thead th {
+  border-top: 1px solid var(--ink);
+  border-bottom-color: var(--ink);
+  color: var(--muted);
+  font-size: var(--size-caption);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.performance-table th:first-child,
+.performance-table td:first-child {
+  padding-left: 0;
+  text-align: left;
+}
+
+.performance-table th:last-child,
+.performance-table td:last-child {
+  padding-right: 0;
+}
+
+.performance-table tbody th {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.performance-caption {
+  max-width: 48rem;
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+  font-size: var(--size-caption);
+  font-style: italic;
+  line-height: 1.45;
+}
+
 /* YAML config sample (What it is) */
 .arch-yaml {
   margin: 0;

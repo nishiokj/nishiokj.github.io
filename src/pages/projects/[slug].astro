@@ -187,6 +187,34 @@ const githubLink = detail.artifacts?.find((artifact) => /github\.com/i.test(arti
     </>
   )}
 
+  {detail.performance?.rows?.length > 0 && (
+    <>
+      <hr class="rule" />
+      <section>
+        <h2 class="section-label">{detail.performance.label || "Performance"}</h2>
+        <div class="performance-table-wrap">
+          <table class="performance-table">
+            <thead>
+              <tr>
+                {detail.performance.columns.map((column) => <th scope="col">{column}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {detail.performance.rows.map((row) => (
+                <tr>
+                  {row.map((cell, index) => (
+                    index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {detail.performance.caption && <p class="performance-caption">{detail.performance.caption}</p>}
+      </section>
+    </>
+  )}
+
   {detail.samples?.length > 0 && (
     <script>
       document.querySelectorAll("[data-sample-tab]").forEach((tab) => {

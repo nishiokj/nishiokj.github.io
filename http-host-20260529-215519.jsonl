@@ -1,0 +1,5 @@
+{"errors": 0, "max_ms": 0.26, "mean_ms": 0.145, "median_ms": 0.13, "min_ms": 0.11, "name": "GET /health baseline", "p95_ms": 0.207, "p99_ms": 0.234, "requests": 500, "throughput_rps": 6861.37, "wall_ms": 72.87}
+{"errors": 0, "max_ms": 12.084, "mean_ms": 4.997, "median_ms": 4.963, "min_ms": 2.946, "name": "sequential Write tool invocations", "p95_ms": 6.256, "p99_ms": 8.9, "requests": 250, "throughput_rps": 199.99, "wall_ms": 1250.08}
+{"errors": 0, "max_ms": 0.446, "mean_ms": 0.25, "median_ms": 0.215, "min_ms": 0.181, "name": "sequential Read tool invocations", "p95_ms": 0.37, "p99_ms": 0.401, "requests": 250, "throughput_rps": 3967.87, "wall_ms": 63.01}
+{"errors": 0, "max_ms": 0.519, "mean_ms": 0.392, "median_ms": 0.39, "min_ms": 0.357, "name": "sequential Glob over 250 files", "p95_ms": 0.433, "p99_ms": 0.448, "requests": 100, "throughput_rps": 2537.97, "wall_ms": 39.4}
+{"errors": 0, "max_ms": 221.056, "mean_ms": 98.001, "median_ms": 97.273, "min_ms": 8.878, "name": "concurrent Write, 8 envs, 32 clients", "p95_ms": 141.03, "p99_ms": 169.119, "requests": 800, "throughput_rps": 319.98, "wall_ms": 2500.14}

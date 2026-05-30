@@ -46,7 +46,7 @@
           "label": "",
           "intro": [
             {
-              "html": "Substrate is an environment like a filesystem, with a worker that reads from an agent application in the background. It then takes the tool call events and applies them against the filesystem. Intuitively, Substrate's SDK intercepts your tool calls, writes them to the broker, which is often just a path in your filesystem. The worker will be listening on the broker, relaying the tool call events to the server for execution."
+              "html": "Substrate is an environment like a filesystem, with a worker that reads from an agent application in the background. Intuitively, Substrate's SDK intercepts your tool calls, writes them to the broker, which is often just a path in your filesystem. The worker will be listening on the broker, relaying the tool call events to the server for execution."
             }
           ],
           "diagram": {
@@ -75,7 +75,61 @@
             "label": "Source on GitHub",
             "href": "https://github.com/nishiokj/Substrate"
           }
-        ]
+        ],
+        "performance": {
+          "label": "Performance snapshot",
+          "caption": "Measured on localhost against a release-built Substrate HTTP host. The run created real environments and sessions, then executed actual tool calls against temporary workspaces.",
+          "columns": [
+            "Workload",
+            "Requests",
+            "Errors",
+            "Throughput",
+            "Median",
+            "P95"
+          ],
+          "rows": [
+            [
+              "GET /health baseline",
+              "500",
+              "0",
+              "6,861 rps",
+              "0.130 ms",
+              "0.207 ms"
+            ],
+            [
+              "Sequential Write",
+              "250",
+              "0",
+              "200 rps",
+              "4.963 ms",
+              "6.256 ms"
+            ],
+            [
+              "Sequential Read",
+              "250",
+              "0",
+              "3,968 rps",
+              "0.215 ms",
+              "0.370 ms"
+            ],
+            [
+              "Sequential Glob over 250 files",
+              "100",
+              "0",
+              "2,538 rps",
+              "0.390 ms",
+              "0.433 ms"
+            ],
+            [
+              "Concurrent Write, 8 envs, 32 clients",
+              "800",
+              "0",
+              "320 rps",
+              "97.273 ms",
+              "141.030 ms"
+            ]
+          ]
+        }
       }
     },
     {
@@ -206,7 +260,7 @@
           "diagram": {
             "src": "projects/nova/arch.svg",
             "alt": "Nova architecture diagram showing the client, RPC server, command gateway, harness, event bus, orchestrator, agent, tool registry, subscribers, SQLite, model providers, and Substrate filesystem integration.",
-            "caption": "Nova architecture — client commands flow through the RPC server and gateway into the harness, while the orchestrator, agent, tool registry, event bus, subscribers, SQLite, model providers, and Substrate-backed filesystem coordinate a run."
+            "caption": "Nova request lifecycle — ① the client issues a request to the server, ② routed through the command gateway, ③ to the harness, ④ which drives the orchestrator's loop-until-goal governor, ⑤ invoking the agent, ⑥ whose ToolRegistry executes tools against Substrate, ⑦ and the server returns the result to the client. Dashed edges are the asynchronous event stream — components emit events to the bus, which publishes to the session, trace, and log subscribers."
           }
         },
         "why": [
