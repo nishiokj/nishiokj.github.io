@@ -538,8 +538,8 @@ main {
 --------------------------------------------------------------------------- */
 .project-detail-main {
   max-width: 78rem;
-  padding-left: clamp(7rem, 12vw, 12rem);
-  padding-right: clamp(7rem, 12vw, 12rem);
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
 }
 
 .breadcrumb {
