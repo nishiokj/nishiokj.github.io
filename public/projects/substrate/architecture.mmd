@@ -33,7 +33,7 @@ flowchart TB
 
   agent -->|"tool call"| broker
   agent -.->|"direct call"| server
-  worker -.->|"listens"| broker
+  broker -.->|"worker pulls"| worker
   worker --> server
   server --> resolver
   resolver --> fs

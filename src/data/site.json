@@ -46,7 +46,7 @@
           "label": "",
           "intro": [
             {
-              "html": "Substrate is an environment like a filesystem, with a worker that reads from an agent application in the background. It then takes the tool call events and applies them against the filesystem. Intuitively, you may think the worker is “intercepting” these tool calls."
+              "html": "Substrate is an environment like a filesystem, with a worker that reads from an agent application in the background. It then takes the tool call events and applies them against the filesystem. Intuitively, Substrate's SDK intercepts your tool calls, writes them to the broker, which is often just a path in your filesystem. The worker will be listening on the broker, relaying the tool call events to the server for execution."
             }
           ],
           "diagram": {
