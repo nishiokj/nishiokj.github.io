@@ -143,10 +143,10 @@ main {
 }
 
 .hero-photo img {
-  width: 105%;
-  height: 100%;
+  width: 112%;
+  height: 130%;
   object-fit: cover;
-  object-position: 0% 7%;
+  object-position: 0% 10%;
 }
 
 .masthead h1 {
