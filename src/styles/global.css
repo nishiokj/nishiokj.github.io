@@ -55,6 +55,7 @@
 
   --max:    66rem;
   --gutter: 1.5rem;
+  --measure: 66ch;  /* reading width for running prose (~66 characters) */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -188,7 +189,7 @@ main {
   margin: 0;
   color: var(--ink);
   width: 100%;
-  max-width: 48rem;
+  max-width: var(--measure);
   font-size: 1.0rem;
   line-height: 1.55;
 }
@@ -209,7 +210,7 @@ main {
 }
 
 .projects-intro {
-  max-width: 44rem;
+  max-width: var(--measure);
   margin: 0 0 3.5rem;
   color: var(--ink);
   font-size: 1.00rem;
@@ -306,7 +307,7 @@ main {
   font-size: 0.7rem;
   font-weight: 400;
   flex: 0 0 auto;
-  color: var(--navy);
+  color: var(--ink);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-variant-numeric: lining-nums;
@@ -347,32 +348,6 @@ main {
   padding: 0.23rem 0.35rem 0.25rem;
   text-transform: uppercase;
   white-space: nowrap;
-}
-
-.read-more {
-  position: relative;
-  z-index: 1;
-  display: inline;
-  margin-left: 0.35rem;
-  font-size: 0.7rem;
-  font-family: var(--sans-body);
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--accent);
-  text-decoration: underline;
-  text-decoration-color: rgba(166, 52, 43, 0.4);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.18em;
-  vertical-align: middle;
-  transition: color 120ms ease, text-decoration-color 120ms ease;
-}
-
-.read-more:hover,
-.read-more:focus-visible {
-  color: var(--accent);
-  text-decoration-color: rgba(166, 52, 43, 0.45);
-  outline: none;
 }
 
 .project h2 {
@@ -581,7 +556,7 @@ main {
    Project detail page
 --------------------------------------------------------------------------- */
 .project-detail-main {
-  max-width: 78rem;
+  max-width: var(--max);
   padding-left: var(--gutter);
   padding-right: var(--gutter);
 }
@@ -644,7 +619,7 @@ main {
   font-weight: 400;
   text-transform: none;
   letter-spacing: 0;
-  color: var(--navy);
+  color: var(--ink);
   white-space: nowrap;
 }
 
@@ -653,7 +628,7 @@ main {
 }
 
 .project-lede {
-  max-width: 48rem;
+  max-width: var(--measure);
   margin: 0;
   font-size: 1rem;
   line-height: 1.6;
@@ -722,7 +697,7 @@ main {
 
 /* Prose blocks — used by Why / What sections */
 .prose-blocks {
-  max-width: 48rem;
+  max-width: var(--measure);
   display: flex;
   flex-direction: column;
   gap: 1.45rem;
@@ -793,7 +768,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 2.25rem;
-  max-width: 48rem;
+  max-width: var(--measure);
 }
 
 .decision-item {
@@ -888,7 +863,7 @@ main {
 .sample-code {
   margin: 0;
   padding: 0.7rem 0.85rem;
-  background: var(--grid);
+  background: #F6F1E6;
   border: 1px solid var(--ink);
   font-family: "SF Mono", "Menlo", "Fira Code", monospace;
   font-size: 0.75rem;

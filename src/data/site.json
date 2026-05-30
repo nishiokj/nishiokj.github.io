@@ -29,7 +29,7 @@
       "slug": "substrate",
       "body": "Portable tool execution service that reduces the burden on agent applications by managing environment complexity and eliminating repetitive tool implementation",
       "stack": [
-        "Rust"
+        "Agent Tooling"
       ],
       "date": "May 2026",
       "datetime": "2026-05",
@@ -133,9 +133,8 @@
       "slug": "genie",
       "body": "Synthetic data workflow leveraging Adversarial Revision and LLM-as-Judge patterns which improve final output quality",
       "stack": [
-        "Python",
-        "LangGraph",
-        "Substrate"
+        "Synthetic Data",
+        "Agent Workflow"
       ],
       "date": "Apr 2026",
       "datetime": "2026-04",
@@ -185,10 +184,9 @@
       "slug": "bucephalus",
       "body": "Control-plane infrastructure for long-running jobs requiring per-task isolation such as benchmarks, evals, regression tests and general experiments",
       "stack": [
-        "Rust",
-        "Postgres",
-        "SQLite",
-        "Docker/Modal"
+        "Benchmarking",
+        "Evaluation",
+        "Infrastructure"
       ],
       "date": "Dec 2025",
       "datetime": "2025-12",
@@ -244,9 +242,8 @@
       "slug": "nova",
       "body": "Model-agnostic agent runtime that manages long context, provides tracing, tools and event streaming. Has RAG-based memory system, a trace viewer and cron job scheduler as additional plugins",
       "stack": [
-        "TypeScript",
-        "Bun",
-        "Effect"
+        "Agent Runtime",
+        "Harness"
       ],
       "date": "Oct 2025",
       "datetime": "2025-10",
