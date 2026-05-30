@@ -46,7 +46,7 @@ const sampleBeside = detail.what?.sampleBeside && detail.samples?.length > 0;
     <time class="project-detail-date" datetime={project.datetime}>{formatProjectDate(project.datetime, project.date, "long")}</time>
     {githubLink && (
       <a class="project-detail-github" href={githubLink.href} target="_blank" rel="noopener">
-        <img src="/icons/github-icon.png" alt="" aria-hidden="true" />
+        <span class="gh-icon" aria-hidden="true"></span>
         <span>{githubLink.label.replace(/^Source on /i, "")}</span>
       </a>
     )}
@@ -112,13 +112,10 @@ const sampleBeside = detail.what?.sampleBeside && detail.samples?.length > 0;
       <section>
         <h2 class="section-label">Decisions</h2>
         <div class="decisions-list">
-          {detail.decisions.map((decision, index) => (
+          {detail.decisions.map((decision) => (
             <div class="decision-item">
-              <span class="decision-num">{String(index + 1).padStart(2, "0")}</span>
-              <div>
-                <h3 class="decision-heading">{decision.heading}</h3>
-                <p class="decision-body">{decision.body}</p>
-              </div>
+              <h3 class="decision-heading">{decision.heading}</h3>
+              <p class="decision-body">{decision.body}</p>
             </div>
           ))}
         </div>

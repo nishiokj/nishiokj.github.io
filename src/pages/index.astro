@@ -19,7 +19,7 @@ import { assetPath, formatProjectDate, linkIcon, nbsp, renderInlineBlock } from 
                 <a href={link.href} aria-label={link.label} target={external ? "_blank" : undefined} rel={external ? "noopener me" : undefined}>
                   {icon ? (
                     <>
-                      <img src={icon} alt="" aria-hidden="true" />
+                      <span class="contact-icon" style={`--icon: url('${icon}')`} aria-hidden="true"></span>
                       <span class="sr-only">{link.label}</span>
                     </>
                   ) : link.label}
@@ -36,7 +36,7 @@ import { assetPath, formatProjectDate, linkIcon, nbsp, renderInlineBlock } from 
     <div class="hero-photo"><img src={assetPath("headshot.jpeg")} alt={site.name} width="280" height="280" /></div>
   </header>
 
-  <hr class="rule" />
+  <hr class="rule rule--navy" />
 
   <section class="work" id="projects">
     <h2 class="work-heading">Projects</h2>
@@ -56,11 +56,6 @@ import { assetPath, formatProjectDate, linkIcon, nbsp, renderInlineBlock } from 
         return (
           <div class="project">
             <dt class="project-title">
-              {project.stack?.length > 0 && (
-                <ul class="project-stack">
-                  {project.stack.map((item) => <li>{item}</li>)}
-                </ul>
-              )}
               <div class="project-heading-row">
                 <h2>
                   {detailHref ? (
@@ -71,6 +66,11 @@ import { assetPath, formatProjectDate, linkIcon, nbsp, renderInlineBlock } from 
                 </h2>
                 <time class="project-date" datetime={project.datetime}>{nbsp(formatProjectDate(project.datetime, project.date))}</time>
               </div>
+              {project.stack?.length > 0 && (
+                <ul class="project-stack">
+                  {project.stack.map((item) => <li>{item}</li>)}
+                </ul>
+              )}
             </dt>
             <dd class="project-body">
               <p class="project-summary">

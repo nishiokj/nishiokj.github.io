@@ -62,13 +62,13 @@
             "label": "Python minimal SDK loop",
             "language": "py",
             "href": "projects/substrate/minimal.py",
-            "code": "from substrate import Environment\n\nprompt = \"Create notes.txt with a short hello, then read it back.\"\nenv = Environment.create(host=\"local\", workspace=\"new\")\ndefault_tools = env.tool_schemas()\nagent = your_llm_client()  # Replace with your LLM client initialization.\n\n\ndef main():\n    response = agent.generate(prompt, tools=default_tools)\n\n    for tool_call in response.tool_calls():\n        tool_result = env.execute(tool_call)\n        agent.messages.append(tool_result)\n\n    env.close()"
+            "code": "from pathlib import Path\nfrom substrate import Environment\n\n\ndef open_session(root: Path, *, timeout_ms: int = 600_000):\n    \"\"\"Provision the isolated environment once. The session outlives any agent.\"\"\"\n    env = Environment.create(\n        workspace={\"kind\": \"existing\", \"root\": str(root)},\n        worker={\"kind\": \"managed\", \"id\": \"synth-pipeline-worker\"},\n        policy={\n            \"readRoots\": [\"/workspace\"],\n            \"writeRoots\": [\"/workspace\"],\n            \"network\": {\"enabled\": False},\n            \"maxDurationMs\": timeout_ms,\n            \"maxOutputBytes\": 100_000,\n        },\n        submitTimeoutMs=timeout_ms,\n    )\n    return env.create_session()\n\n\ndef run(session, agent):\n    \"\"\"Drive an agent against an existing session. Substrate owns the tools.\"\"\"\n    while not agent.done:\n        call = agent.next_tool_call()\n        result = session.submit_tool(call.name, cwd=\"/workspace\", **call.arguments)\n        agent.observe(result)\n    return session.effects()  # the ledger of what was applied\n\n\n# The environment is provisioned once; agents come and go against it.\nsession = open_session(Path(\"/data/run-42\"))\neffects = run(session, agent)\n"
           },
           {
             "label": "TypeScript minimal SDK loop",
             "language": "ts",
             "href": "projects/substrate/minimal.ts",
-            "code": "import { Environment } from \"@substrate/sdk\";\n\nconst prompt = \"Create notes.txt with a short hello, then read it back.\";\nconst env = await Environment.create({ host: \"local\", workspace: \"new\" });\nconst defaultTools = env.toolSchemas();\nconst agent = yourLlmClient(); // Replace with your LLM client initialization.\n\nasync function main() {\n  const response = await agent.generate(prompt, { tools: defaultTools });\n\n  for (const toolCall of response.toolCalls()) {\n    const toolResult = await env.execute(toolCall);\n    agent.messages.push(toolResult);\n  }\n\n  await env.close();\n}"
+            "code": "import { Environment } from \"@substrate/sdk\";\n\nasync function openSession(root: string, timeoutMs = 600_000) {\n  // Provision the isolated environment once. The session outlives any agent.\n  const env = await Environment.create({\n    workspace: { kind: \"existing\", root },\n    worker: { kind: \"managed\", id: \"synth-pipeline-worker\" },\n    policy: {\n      readRoots: [\"/workspace\"],\n      writeRoots: [\"/workspace\"],\n      network: { enabled: false },\n      maxDurationMs: timeoutMs,\n      maxOutputBytes: 100_000,\n    },\n    submitTimeoutMs: timeoutMs,\n  });\n  return env.createSession();\n}\n\nasync function run(session, agent) {\n  // Drive an agent against an existing session. Substrate owns the tools.\n  while (!agent.done) {\n    const call = agent.nextToolCall();\n    const result = await session.submitTool(call.name, { cwd: \"/workspace\", ...call.arguments });\n    agent.observe(result);\n  }\n  return session.effects(); // the ledger of what was applied\n}\n\n// The environment is provisioned once; agents come and go against it.\nconst session = await openSession(\"/data/run-42\");\nconst effects = await run(session, agent);\n"
           }
         ],
         "artifacts": [
@@ -83,7 +83,6 @@
           "columns": [
             "Workload",
             "Requests",
-            "Errors",
             "Throughput",
             "Median",
             "P95"
@@ -92,7 +91,6 @@
             [
               "GET /health baseline",
               "500",
-              "0",
               "6,861 rps",
               "0.130 ms",
               "0.207 ms"
@@ -100,7 +98,6 @@
             [
               "Sequential Write",
               "250",
-              "0",
               "200 rps",
               "4.963 ms",
               "6.256 ms"
@@ -108,7 +105,6 @@
             [
               "Sequential Read",
               "250",
-              "0",
               "3,968 rps",
               "0.215 ms",
               "0.370 ms"
@@ -116,7 +112,6 @@
             [
               "Sequential Glob over 250 files",
               "100",
-              "0",
               "2,538 rps",
               "0.390 ms",
               "0.433 ms"
@@ -124,7 +119,6 @@
             [
               "Concurrent Write, 8 envs, 32 clients",
               "800",
-              "0",
               "320 rps",
               "97.273 ms",
               "141.030 ms"
@@ -200,7 +194,9 @@
       "datetime": "2025-12",
       "detail": {
         "why": [
-          "My initial reason for building this was not why I continue to today. Initially, I wanted to simply run my filesystem agent, Nova, against popular benchmarks. Today, I continue to build on Bucephalus because there are several problems emerging with LLM generated content that are related. The issue is that LLM's generate an amount of code that was previously impossible. When your agent writes five thousand lines of code, how can you even begin to review it? An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2 jet. Not to mention, we need to assume the B-2 was assembled by another orangutan who was following a markdown file that described how a jet should be built by a guy who has never built one. The same exact issue applies directly to creating your own benchmarks, where does ground truth reside? Even if you want to use a proven benchmark, how can you even trust the results? Many open source benchmark questions have been used as training data! Agents have been caught going through git history to cheat on high profile benchmarks people still cite. This leads to why I like the term 'Experiments'. An experiment implies some level of rigor before allowing you to trust your results. While the scientific method won't materialize a universal ground truth oracle and save the day, ensuring your pipettes are clean, you're isolating your variables and your lab rat has not been trained on your maze is a good foundation."
+          "My initial reason for building this was not why I continue to today. Initially, I wanted to simply run my filesystem agent, Nova, against popular benchmarks. Today, I continue to build on Bucephalus because there are several problems emerging with LLM generated content that are related. The issue is that LLM's generate an amount of code that was previously impossible.",
+          "When your agent writes five thousand lines of code, how can you even begin to review it? An agent writing the unit tests for agent-delivered code is the equivalent of an orangutan signing off on a B-2 jet. Not to mention, we need to assume the B-2 was assembled by another orangutan who was following a markdown file that described how a jet should be built by a guy who has never built one. The same exact issue applies directly to creating your own benchmarks, where does ground truth reside? Even if you want to use a proven benchmark, how can you even trust the results? Many open source benchmark questions have been used as training data! Agents have been caught going through git history to cheat on high profile benchmarks people still cite.",
+          "This leads to why I like the term 'Experiments'. An experiment implies some level of rigor before allowing you to trust your results. While the scientific method won't materialize a universal ground truth oracle and save the day, ensuring your pipettes are clean, you're isolating your variables and your lab rat has not been trained on your maze is a good foundation."
         ],
         "what": {
           "label": "",
